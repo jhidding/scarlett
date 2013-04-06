@@ -150,7 +150,8 @@ namespace Scarlett
 				return ss.str();
 			}
 
-			T value() const { return m_value; }
+			T const &value() const { return m_value; }
+			T &ref() { return m_value; }
 			operator T() const { return m_value; }
 
 			bool is_equiv(ptr other) const
