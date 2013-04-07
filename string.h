@@ -1,8 +1,14 @@
 #pragma once
+#include "object.h"
+#include "misc/format.h"
+#include <map>
+
+#include <string>
 
 namespace Scarlett
 {
-	class Atom<char> public Atom_base<char>
+	template <>
+	class Atom<char>: public Atom_base<char>
 	{
 		public:
 			Atom<char>(char ch): Atom_base<char>(ch) {}
@@ -10,15 +16,18 @@ namespace Scarlett
 			std::string repr() const { return Misc::format("\\#", value()); }
 	};
 
-	inline bool is_char(ptr a) { return a->type_name() == "char"; }
-
 	typedef Atom<char> Char;
 
+	inline bool is_char(ptr a) { return a->type_name() == "char"; }
+
+	template <>
 	class Atom<std::string>: public Atom_base<std::string>
 	{
+		static std::map<char, std::string> char_repr;
+
 		public:
 			Atom<std::string>(std::string const &s): 
-				Atom_base<std::sting>(s)
+				Atom_base<std::string>(s)
 			{}
 
 			std::string type_name() const { return "string"; }
@@ -30,12 +39,30 @@ namespace Scarlett
 
 			std::string repr() const
 			{
-				return Misc::format('"', value(), '"');
+				std::ostringstream ss;
+				ss << '"';
+
+				for (char p : value())
+				{
+					if (p < 32)
+						if (char_repr.count(p) == 1)
+							ss << char_repr[p];
+						else
+							ss << "\\x" << std::ios::hex << 
+							   << std::ios::setw(2) << std::ios::setfill(0)
+							   << unsigned(p);
+
+					else
+						ss << p;
+				}
+				ss << '"';
+				return ss.str();
 			}
 	};
 
-	inline bool is_string(ptr a) { return a->type_name() == "string"; }
-
 	typedef Atom<std::string> String;
+
+	inline bool is_string(ptr a) { return a->type_name() == "string"; }
+	inline String *operator "" _a(char const *c, size_t s) { return new String(c); }
 }
 

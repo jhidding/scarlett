@@ -112,7 +112,7 @@ namespace Scarlett
 	};
 
 	inline bool is_symbol(ptr q) { return q->type_name() == "symbol"; }
-	inline ptr operator "" _s(char const *c, size_t s) { return new Symbol(c); }
+	inline Symbol *operator "" _s(char const *c, size_t s) { return new Symbol(c); }
 
 	class Special: public Object
 	{
