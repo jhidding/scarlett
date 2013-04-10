@@ -3,7 +3,7 @@
 
 using namespace Misc;
 
-Misc::Regex_buffer::Regex_buffer(std::string const &expression, int flags = REG_EXTENDED)
+Misc::Regex_buffer::Regex_buffer(std::string const &expression, int flags)
 {
 	int errc = regcomp(&buffer, expression.c_str(), flags);
 
@@ -15,7 +15,7 @@ Misc::Regex_buffer::Regex_buffer(std::string const &expression, int flags = REG_
 	}
 }
 
-~Misc::Regex_buffer::Regex_buffer()
+Misc::Regex_buffer::~Regex_buffer()
 {
 	regfree(&buffer);
 }
@@ -38,7 +38,7 @@ Misc::Regex_match::iterator Misc::Regex_match::spawn_iterator(
 	std::vector<regmatch_t>::const_iterator const &j) const 
 { 
 	return iterator(j, 
-		[str] (std::vector<regmatch_t>::const_iterator const &i)
+		[this] (std::vector<regmatch_t>::const_iterator const &i) -> std::string
 	{
 		if (i->rm_so == -1) return "";
 		return str.substr(i->rm_so, i->rm_eo - i->rm_so);
@@ -55,7 +55,7 @@ Misc::Regex_match::iterator Misc::Regex_match::end() const
 	return spawn_iterator(match.end());
 }
 
-Misc::Regex_match Misc::Regex::operator()(std::string const &s, int flags = 0)
+Misc::Regex_match Misc::Regex::operator()(std::string const &s, int flags)
 {
 	Regex_match A(s, nmatch);
 	int errc = regexec(*buffer, s.c_str(), nmatch, A.ref(), flags);

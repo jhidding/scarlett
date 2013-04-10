@@ -37,27 +37,7 @@ namespace Scarlett
 				ref() += ch->value();
 			}
 
-			std::string repr() const
-			{
-				std::ostringstream ss;
-				ss << '"';
-
-				for (char p : value())
-				{
-					if (p < 32)
-						if (char_repr.count(p) == 1)
-							ss << char_repr[p];
-						else
-							ss << "\\x" << std::ios::hex << 
-							   << std::ios::setw(2) << std::ios::setfill(0)
-							   << unsigned(p);
-
-					else
-						ss << p;
-				}
-				ss << '"';
-				return ss.str();
-			}
+			std::string repr() const;
 	};
 
 	typedef Atom<std::string> String;

@@ -69,8 +69,11 @@ class Readlines
 };
 
 #include "../unittest/test.h"
+#include "regex.h"
 
-Test::Unit(
+using namespace Misc;
+
+Test::Unit Regex_numerical_test(
 	"0000 - regex tester",
 	"this application contains some regexes that need to work"
 	"correctly. feel free to enter some numbers.",

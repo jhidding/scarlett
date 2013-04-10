@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <regex.h>
+#include <memory>
 
 #include "wrap.h"
 
@@ -38,7 +39,7 @@ namespace Misc
 		regmatch_t *ref() 
 			{ return match.data(); }
 
-		iterator spawn_iterator(regvec::const_iterator const &);
+		iterator spawn_iterator(regvec::const_iterator const &) const;
 
 		public:
 			bool is_match() const { return success; }
