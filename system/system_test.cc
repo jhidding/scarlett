@@ -150,7 +150,7 @@ Test::Unit Factorial_test_1(
 	))), &r);
 	for (Continuation &cc : program)
 	{
-		//std::cerr << cc.state() << std::endl;
+		std::cerr << cc.state() << std::endl;
 	}
 	std::cerr << r.result()->repr() << std::endl;
 	GC<Object>::cycle();
@@ -186,7 +186,7 @@ Test::Unit Factorial_test_2(
 
 	for (Continuation &cc : program)
 	{
-		//std::cerr << cc.state() << std::endl;
+		std::cerr << cc.state() << std::endl;
 		//GC<Object>::cycle();
 	}
 

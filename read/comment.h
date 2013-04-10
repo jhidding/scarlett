@@ -8,8 +8,8 @@ namespace Scarlett
 		class Comment: public Reader
 		{
 			public:
-				Comment(Reader *parent):
-					Reader(parent) {}
+				Comment(Continuation *parent_):
+					Reader(parent_) {}
 
 				virtual Continuation *supply(ptr a) { return parent(); }
 
@@ -17,6 +17,43 @@ namespace Scarlett
 				{
 					if (ch == '\n') return parent();
 					return this;
+				}
+		};
+
+		class BlockComment: public Reader
+		{
+			enum { hash, vert, other } last;
+
+			public:
+				BlockComment(Continuation *parent_):
+					Reader(parent_), last(other) {}
+
+				Continuation *put(int ch)
+				{
+					switch (ch)
+					{
+						case '#': 
+							if (last == vert)
+							{
+								return parent();
+							}
+
+							last = hash;
+							return this;
+
+						case '|':
+							if (last == hash)
+							{
+								last = other;
+								return new BlockComment(this);
+							}
+
+							last = vert;
+							return this;
+
+						default:
+							return this;
+					}
 				}
 		};
 	}

@@ -28,8 +28,8 @@ namespace Scarlett
 				Reader(Continuation *parent, Input_port *in_):
 					Continuation(parent), in(in_) {}
 
-				Reader(Reader *parent):
-					Continuation(parent), in(parent->in) {}
+				Reader(Continuation *parent):
+					Continuation(parent), in(cast_ptr<Reader>(parent)->in) {}
 
 				virtual void gc(Edict const &cmd) const
 					{ Continuation::gc(cmd); cmd(in); }
@@ -38,15 +38,14 @@ namespace Scarlett
 
 				virtual Continuation *put(int ch) = 0;
 
+				virtual Continuation *supply(ptr a)
+					{ return parent(); }
+
 				virtual Continuation *apply()
 					{ return put(in->get()); }
 		};
 
 
-
-		class Char: public Reader
-		{
-		};
 
 	}
 }

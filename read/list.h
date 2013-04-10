@@ -10,13 +10,40 @@ namespace Scarlett
 {
 	namespace Read
 	{
+		class CdrLiteral;
+
+		class Dot: public Reader
+		{
+			public:
+				Dot(Continuation *parent):
+					Reader(parent) {}
+
+				virtual Continuation *put(int ch)
+				{
+					if (isspace(ch))
+					{
+						parent()->poke(Improper);
+						return new CdrLiteral(parent());
+					}
+
+					if (isnumber(ch))
+					{
+						return new Number(parent())->put('.')->put(ch);
+					}
+
+					throw Exception(ERROR_syntax, 
+							"'.' should be followed by digit for a number, "
+							"or by white space to make a pair.");
+				}
+		};
+
 		class List: public Reader
 		{
 			ptr rev_lst;
 			bool improper;
 
 			public:
-				List(Reader *parent):
+				List(Continuation *parent):
 					Reader(parent), rev_lst(&nil), improper(false) {}
 
 				virtual void gc(Edict const &cmd) 
@@ -38,7 +65,7 @@ namespace Scarlett
 				virtual Continuation *put(int ch)
 				{
 					if (ch == '#') return new Hash(this);
-					if (ch == '"') return new String(this);
+					if (ch == '"') return new StringLiteral(this);
 					if (ch == '(') return new List(this);
 					if (ch == ';') return new Comment(this);
 					if (isdigit(ch)) return (new Number(this))->put(ch);
@@ -57,11 +84,14 @@ namespace Scarlett
 				}
 		};
 
-		class Cdr: public Reader
+		class CdrLiteral: public Reader
 		{
 			ptr tail;
 
 			public:
+				CdrLiteral(Continuation *parent_):
+					Reader(parent_) {}
+
 				virtual void gc(Edict const &cmd) 
 					{ Reader::gc(cmd); cmd(tail); }
 
@@ -73,7 +103,7 @@ namespace Scarlett
 					if (ch == ')') throw Exception(ERROR_syntax, 
 						"didn't expect ')' immediately after '.' ");
 					if (ch == '.') throw Exception(ERROR_syntax, 
-						"found erronous ' . . '";
+						"found erronous ' . . '");
 
 					if (ch == '#') return new Hash(parent());
 					if (ch == '"') return new String(parent());
