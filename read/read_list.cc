@@ -1,5 +1,6 @@
 #include "list.h"
 #include "hash.h"
+#include "sign.h"
 
 using namespace Scarlett;
 using namespace Read;
@@ -28,13 +29,14 @@ Continuation *Scarlett::Read::ListLiteral::put(int ch)
 	if (ch == '"') return new StringLiteral(this);
 	if (ch == '(') return new ListLiteral(this);
 	if (ch == ';') return new Comment(this);
+	if (ch == '.') return new Dot(this);
+	if (ch == '+' or ch == '-') return new Sign(this, ch);
 
-	if (isdigit(ch) or ch == '+' or ch == '-')
+	if (isdigit(ch))
 		return (new Number(this))->put(ch);
 
 	if (isspace(ch)) return this;
 
-	if (ch == '.') return new Dot(this);
 	if (ch == ')') 
 	{
 		if (improper)
@@ -60,8 +62,9 @@ Continuation *Scarlett::Read::CdrLiteral::put(int ch)
 	if (ch == '"') return new StringLiteral(parent());
 	if (ch == '(') return new ListLiteral(parent());
 	if (ch == ';') return new Comment(this);
+	if (ch == '+' or ch == '-') return new Sign(this, ch);
 
-	if (isdigit(ch) or ch == '.' or ch == '+' or ch == '-')
+	if (isdigit(ch) or ch == '.')
 		return (new Number(parent()))->put(ch);
 
 	if (isspace(ch)) return this;

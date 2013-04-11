@@ -6,6 +6,7 @@
 #include "comment.h"
 #include "number.h"
 #include "symbol.h"
+#include "sign.h"
 
 #include "../object.h"
 #include "../pair.h"
@@ -42,8 +43,9 @@ namespace Scarlett
 					if (ch == '"') return new StringLiteral(this);
 					if (ch == '(') return new ListLiteral(this);
 					if (ch == ';') return new Comment(this);
+					if (ch == '+' or ch == '-') return new Sign(this, ch);
 
-					if (isdigit(ch) or ch == '.' or ch == '+' or ch == '-') 
+					if (isdigit(ch) or ch == '.') 
 						return (new Number(this))->put(ch);
 					if (isspace(ch)) return this;
 
