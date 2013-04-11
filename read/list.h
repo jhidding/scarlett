@@ -1,10 +1,10 @@
 #pragma once
 
-#include "read.h"
+#include "read.H"
 #include "string.h"
 #include "comment.h"
 #include "number.h"
-#include "dot.h"
+#include "symbol.h"
 
 namespace Scarlett
 {
@@ -18,37 +18,24 @@ namespace Scarlett
 				Dot(Continuation *parent):
 					Reader(parent) {}
 
-				virtual Continuation *put(int ch)
-				{
-					if (isspace(ch))
-					{
-						parent()->poke(Improper);
-						return new CdrLiteral(parent());
-					}
+				std::string state() const { return Misc::format("dot"); }
 
-					if (isnumber(ch))
-					{
-						return new Number(parent())->put('.')->put(ch);
-					}
-
-					throw Exception(ERROR_syntax, 
-							"'.' should be followed by digit for a number, "
-							"or by white space to make a pair.");
-				}
+				virtual Continuation *put(int ch);
 		};
 
-		class List: public Reader
+		class ListLiteral: public Reader
 		{
 			ptr rev_lst;
 			bool improper;
 
 			public:
-				List(Continuation *parent):
+				ListLiteral(Continuation *parent):
 					Reader(parent), rev_lst(&nil), improper(false) {}
 
 				virtual void gc(Edict const &cmd) 
 					{ Reader::gc(cmd); cmd(rev_lst); }
 
+				std::string state() const { return Misc::format("list-literal `", rev_lst->repr(), "'"); }
 
 				virtual void poke(Msg a)
 				{
@@ -62,58 +49,21 @@ namespace Scarlett
 					return this;
 				}
 
-				virtual Continuation *put(int ch)
-				{
-					if (ch == '#') return new Hash(this);
-					if (ch == '"') return new StringLiteral(this);
-					if (ch == '(') return new List(this);
-					if (ch == ';') return new Comment(this);
-					if (isdigit(ch)) return (new Number(this))->put(ch);
-					if (isspace(ch)) return this;
-
-					if (ch == '.') return new Dot(this);
-					if (ch == ')') 
-					{
-						if (improper)
-							return parent()->supply(append_reverse(cdr(rev_lst), car(rev_lst)));
-						else
-							return parent()->supply(reverse(rev_lst));
-					}
-
-					return new Symbol(this);
-				}
+				virtual Continuation *put(int ch);
 		};
 
 		class CdrLiteral: public Reader
 		{
-			ptr tail;
-
 			public:
 				CdrLiteral(Continuation *parent_):
 					Reader(parent_) {}
 
-				virtual void gc(Edict const &cmd) 
-					{ Reader::gc(cmd); cmd(tail); }
+				std::string state() const { return Misc::format("cdr-literal"); }
 
 				virtual Continuation *supply(ptr a) 
-					{ return parent()->supply(tail); }
+					{ return parent()->supply(a); }
 
-				virtual Continuation *put(int ch)
-				{
-					if (ch == ')') throw Exception(ERROR_syntax, 
-						"didn't expect ')' immediately after '.' ");
-					if (ch == '.') throw Exception(ERROR_syntax, 
-						"found erronous ' . . '");
-
-					if (ch == '#') return new Hash(parent());
-					if (ch == '"') return new String(parent());
-					if (ch == '(') return new List(parent());
-					if (ch == ';') return new Comment(this);
-					if (isdigit(ch)) return (new Number(parent()))->put(ch);
-					if (isspace(ch)) return this;
-
-					return new Symbol(parent());
-				}
+				virtual Continuation *put(int ch);
 		};
 	}
 }

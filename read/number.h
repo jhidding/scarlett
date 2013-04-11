@@ -1,34 +1,11 @@
 #pragma once
-#include "read.h"
+#include "read.H"
 
 namespace Scarlett
 {
 	namespace Read
 	{
-		std::map<std::string, std::string> expression = {
-			{"integer", 
-				"[\\+-]?[0-9]+$"},
-
-			{"rational", 
-				"([\\+-])?([0-9]+)/([0-9]+)$"},
-
-			{"real",
-				"([\\+-])?([0-9]*)(\\.[0-9]*)?([eE]([\\+-]?[0-9]+))?$"
-				"|([\\+-])(inf|nan)\\.0$"},
-
-			{"imag",
-				"([\\+-])?([0-9]*)(\\.[0-9]*)?([eE]([\\+-]?[0-9]+))?i$"
-				"|([\\+-])(inf|nan)\\.0i$"},
-
-			{"complex",
-				"(([\\+-])?([0-9]*)(\\.[0-9]*)?([eE](?[\\+-]?[0-9]+))?"
-					"|([\\+-])(inf|nan)\\.0)"
-				"(([\\+-])([0-9]*)(\\.[0-9]*)?([eE]([\\+-]?[0-9]+))?i"
-					"|([\\+-])(inf|nan)\\.0i)$"},
-
-			{"polar",
-				"([\\+-])?([0-9]*)(\\.[0-9]*)?([eE]([\\+-]?[0-9]+))?"
-				"@([\\+-])?([0-9]*)(\\.[0-9]*)?([eE]([\\+-]?[0-9]+))?$"}};
+		extern ptr string_to_number(std::string const &s);
 
 		class Number: public Reader
 		{
@@ -38,12 +15,12 @@ namespace Scarlett
 				Number(Continuation *parent):
 					Reader(parent) {}
 
-				virtual Continuation *supply(ptr a) { return parent(); }
+				std::string state() const { return Misc::format("number: `", s, "'"); }
 
 				virtual Continuation *put(int ch)
 				{
-					if (isspace(ch) or ch == ')')
-						return parent()->supply(string_to_number(s));
+					if (isspace(ch) or ch == ')' or ch == '(')
+						return cast_ptr<Reader>(parent()->supply(string_to_number(s)))->put(ch);
 
 					s += ch;
 					return this;

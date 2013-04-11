@@ -20,7 +20,7 @@ using namespace Misc;
 using namespace Scarlett;
 
 
-struct Regex_code
+struct Regex_testcode
 {
 	size_t 			nsub;
 	std::string 	expr;
@@ -77,7 +77,7 @@ ptr make_polar(ptr a, ptr b)
 	return list(":make-polar:"_s, a, b);
 }
 
-std::map<std::string, Regex_code> numeric_expression = {
+std::map<std::string, Regex_testcode> numeric_expression = {
 /*	{"integer", 	//  1 - integer
 		{ 1, "^[\\+-]?[0-9]+$",
 		[] (Regex_match const &m)

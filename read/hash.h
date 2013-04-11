@@ -1,5 +1,8 @@
 #pragma once
-#include "read.h"
+#include "read.H"
+#include "comment.h"
+#include "char.h"
+#include "vector.h"
 
 namespace Scarlett
 {
@@ -13,6 +16,8 @@ namespace Scarlett
 				SpecialLiteral(Continuation *parent_):
 					Reader(parent_) {}
 
+				std::string state() const { return Misc::format("special-literal: `", s, "'"); }
+
 				Continuation *put(int ch)
 				{
 					static std::map<std::string, std::function<ptr ()>> const lookup = {
@@ -24,37 +29,43 @@ namespace Scarlett
 
 					if (isspace(ch) or ch == ')' or ch == '(')
 					{
-						if (lookup.count(s) == 0)
+						auto i = lookup.find(s);
+						if (i == lookup.end())
 							throw Exception(ERROR_syntax, "unknown hash special: #", s);
 
-						return parent()->supply(lookup[s]())->put(ch);
+						return cast_ptr<Reader>(parent()->supply((i->second)()))->put(ch);
 					}
 
 					s += ch;
+
+					return this;
 				}
 		};
 
 		class Hash: public Reader
 		{
-			Hash(Continuation *parent_):
-				Reader(parent_) {}
+			public:
+				Hash(Continuation *parent_):
+					Reader(parent_) {}
 
-			Continuation *put(int ch)
-			{
-				if (ch == '|')
-					return new BlockComment(parent());
+				std::string state() const { return "hash"; }
 
-				if (ch == '\\')
-					return new CharLiteral(parent());
+				Continuation *put(int ch)
+				{
+					if (ch == '|')
+						return new BlockComment(parent());
 
-				if (ch == '(')
-					return new VectorLiteral(parent());
+					if (ch == '\\')
+						return new CharLiteral(parent());
 
-				if (isspace(ch) or ch == ')')
-					throw Exception(ERROR_syntax, "# cannot be followed by ')' or ' '.");
+					if (ch == '(')
+						return new VectorLiteral(parent());
 
-				return new SpecialLiteral(parent());
-			}
+					if (isspace(ch) or ch == ')')
+						throw Exception(ERROR_syntax, "# cannot be followed by ')' or ' '.");
+
+					return new SpecialLiteral(parent());
+				}
 		};
 	}
 }

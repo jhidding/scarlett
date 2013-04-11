@@ -1,6 +1,7 @@
 #include "test.h"
 #include "../object.h"
 
+using namespace Scarlett;
 using namespace Test;
 
 std::unique_ptr<std::map<std::string, Test::Unit const *>> Test::Unit::_instances;

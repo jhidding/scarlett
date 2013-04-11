@@ -1,5 +1,5 @@
 #pragma once
-#include "read.h"
+#include "read.H"
 
 namespace Scarlett
 {
@@ -11,7 +11,7 @@ namespace Scarlett
 				Comment(Continuation *parent_):
 					Reader(parent_) {}
 
-				virtual Continuation *supply(ptr a) { return parent(); }
+				std::string state() const { return "comment"; }
 
 				virtual Continuation *put(int ch)
 				{
@@ -27,6 +27,8 @@ namespace Scarlett
 			public:
 				BlockComment(Continuation *parent_):
 					Reader(parent_), last(other) {}
+
+				std::string state() const { return "block-comment"; }
 
 				Continuation *put(int ch)
 				{

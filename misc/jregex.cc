@@ -55,7 +55,7 @@ Misc::Regex_match::iterator Misc::Regex_match::end() const
 	return spawn_iterator(match.end());
 }
 
-Misc::Regex_match Misc::Regex::operator()(std::string const &s, int flags)
+Misc::Regex_match Misc::Regex::operator()(std::string const &s, int flags) const
 {
 	Regex_match A(s, nmatch);
 	int errc = regexec(*buffer, s.c_str(), nmatch, A.ref(), flags);

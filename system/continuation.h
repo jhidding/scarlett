@@ -30,6 +30,8 @@ namespace Scarlett
 		Continuation *m_parent;
 
 		public:
+			Continuation() = default;
+
 			Continuation(Continuation *parent_): 
 				m_parent(parent_) {}
 

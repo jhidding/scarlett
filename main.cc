@@ -14,7 +14,7 @@
 
 int main()
 {
-	Test::Unit::all();
+	Scarlett::Test::Unit::all();
 	std::ofstream f("test.log", std::ios::out);
 	Scarlett::Log::print_log_book(f);
 	f.close();

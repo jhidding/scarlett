@@ -5,7 +5,7 @@
 
 namespace Scarlett
 {
-	enum ErrNo { ERROR, ERROR_memory, ERROR_bound, ERROR_unbound, ERROR_match, ERROR_fail, ERROR_syntax };
+	enum ErrNo { ERROR, ERROR_memory, ERROR_bound, ERROR_unbound, ERROR_match, ERROR_fail, ERROR_syntax, ERROR_ni };
 
 	class Exception: public std::exception
 	{

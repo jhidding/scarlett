@@ -2,7 +2,7 @@
 
 using namespace Scarlett;
 
-ptr append_reverse(ptr a, ptr b)
+ptr Scarlett::append_reverse(ptr a, ptr b)
 {
 	while (not is_nil(a))
 	{

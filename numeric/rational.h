@@ -60,7 +60,7 @@ namespace Numeric
 			operator double() const { return double(a) / b; }
 	};
 
-	std::ostream &operator<<(std::ostream &out, rational q)
+	inline std::ostream &operator<<(std::ostream &out, rational q)
 	{
 		out << q.numerator() << "/" << q.denominator();
 		return out;

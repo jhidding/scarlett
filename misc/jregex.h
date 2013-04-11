@@ -59,7 +59,7 @@ namespace Misc
 			Regex(std::string const &expression, int nsub, int flags = REG_EXTENDED):
 				buffer(new Regex_buffer(expression, flags)), nmatch(nsub) {}
 
-			Regex_match operator()(std::string const &s, int flags = 0);
+			Regex_match operator()(std::string const &s, int flags = 0) const;
 	};
 }
 

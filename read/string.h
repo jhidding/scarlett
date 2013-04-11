@@ -1,5 +1,5 @@
 #pragma once
-#include "read.h"
+#include "read.H"
 
 namespace Scarlett
 {
@@ -15,17 +15,17 @@ namespace Scarlett
 
 				if (isdigit(ch))
 				{
-					b = s - '0';
+					b = ch - '0';
 				}
 
 				if (islower(ch))
 				{
-					b = s - 'a' + 10;
+					b = ch - 'a' + 10;
 				}
 
 				if (isupper(ch))
 				{
-					b = s - 'A' + 10;
+					b = ch - 'A' + 10;
 				}
 
 				a = a * 16 + b;
@@ -40,7 +40,7 @@ namespace Scarlett
 
 			for (char ch : s)
 			{
-				int b = s - '0';
+				int b = ch - '0';
 
 				a = a * 8 + b;
 			}
@@ -56,6 +56,8 @@ namespace Scarlett
 				HexChar(Continuation *parent):
 					Reader(parent) {}
 
+				std::string state() const { return Misc::format("hexchar-literal `", s, "'"); }
+
 				virtual Continuation *put(int ch)
 				{
 					if (not isxdigit(ch))
@@ -64,6 +66,8 @@ namespace Scarlett
 					s += ch;
 
 					if (s.length() == 2) return parent()->supply(new Char(hex_to_char(s)));
+
+					return this;
 				}
 		};
 
@@ -75,6 +79,8 @@ namespace Scarlett
 				OctalChar(Continuation *parent):
 					Reader(parent) {}
 
+				std::string state() const { return Misc::format("octchar-literal `", s, "'"); }
+
 				virtual Continuation *put(int ch)
 				{
 					if (ch < '0' or ch >= '8')
@@ -83,16 +89,18 @@ namespace Scarlett
 					s += ch;
 
 					if (s.length() == 3) return parent()->supply(new Char(oct_to_char(s)));
+
+					return this;
 				}
 		};
 
 		class Backslash: public Reader
 		{
-			std::string s;
-
 			public:
 				Backslash(Continuation *parent):
 					Reader(parent) {}
+
+				std::string state() const { return "backslash-literal"; }
 
 				virtual Continuation *put(int ch)
 				{
@@ -101,8 +109,10 @@ namespace Scarlett
 						{'t', '\t'}, {'r', '\r'}, {'a', '\a'}};
 
 					if (ch == 'x') return new HexChar(parent());
-					if (isdigit(ch)) return new OctalChar(parent())->put(ch);
-					if (code.count(ch) == 1) return parent()->supply(new Char(code[ch]));
+					if (isdigit(ch)) return (new OctalChar(parent()))->put(ch);
+
+					auto i = code.find(ch);
+					if (i != code.end()) return parent()->supply(new Char(i->second));
 
 					throw Exception(ERROR_syntax, "unknown escape character in string literal: '", char(ch), "'.");
 				}
@@ -115,6 +125,8 @@ namespace Scarlett
 			public:
 				StringLiteral(Continuation *parent):
 					Reader(parent) {}
+
+				std::string state() const { return Misc::format("string-literal: `", s, "'"); }
 
 				virtual Continuation *supply(ptr a)
 				{

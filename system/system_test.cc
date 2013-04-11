@@ -7,55 +7,6 @@
 
 using namespace Scarlett;
 
-class Program: Static<Object>
-{
-	Continuation *_begin, *_end;
-
-	public:
-		class iterator: public Static<Object>, 
-			std::iterator<std::forward_iterator_tag, Continuation>
-		{
-			Continuation *c;
-
-			public:
-				virtual void gc(Edict const &cmd) const { cmd(c); }
-				
-				iterator(Continuation *c_): c(c_) {}
-				iterator &operator++() { c = c->apply(); return *this; }
-				bool operator==(iterator &o) const { return c == o.c; }
-				bool operator!=(iterator &o) const { return c != o.c; }
-				Continuation &operator*() { return *c; }
-		};
-
-		Program(Continuation *begin_, Continuation *end_):
-			_begin(begin_), _end(end_) {}
-
-		virtual void gc(Edict const &cmd) const { cmd(_begin); cmd(_end); }
-		iterator begin() const { return iterator(_begin); }
-		iterator end() const { return iterator(_end); }
-};
-
-class Result: public Continuation
-{
-	ptr _result;
-
-	public:
-		Result(): Continuation(NULL) {}
-
-		ptr result() const { return _result; }
-
-		virtual Continuation *supply(ptr a)
-		{
-			_result = a;
-			return this;
-		}
-
-		virtual Continuation *apply()
-		{
-			throw Exception(ERROR, "cannot apply top-level continuation.");
-		}
-};
-
 class Square: public Operative
 {
 	public:
@@ -82,10 +33,10 @@ Test::Unit Mapper_test(
 	"Performs a sequential mapping.",
 	[] ()
 {
-	Static<Result> r;
+	Test::Result r;
 	ptr a = list(1_a, 2_a, 3_a, 4_a, 5_a);
 
-	for (Continuation &cc : Program(new Mapper(&r, NULL, new Square, a), &r))
+	for (Continuation &cc : Test::Program(new Mapper(&r, NULL, new Square, a), &r))
 	{
 		std::cerr << cc.state() << std::endl;
 		GC<Object>::cycle();
@@ -112,11 +63,12 @@ Test::Unit List_of_apps_test(
 
 /*	env.print_map(std::cerr); */
 
-	Static<Result> r;
-	Program program(apply(&r, &env, &Eval, list(
+	Test::Result r;
+	Test::Program program(apply(&r, &env, &Eval, list(
 		list(list("$lambda"_s, list("x"_s, "y"_s), 
 			list("+"_s, list("+"_s, "x"_s, "x"_s), "y"_s)),
 			2_a, 7_a))), &r);
+
 	for (Continuation &cc : program)
 	{
 		//std::cerr << cc.state() << std::endl;
@@ -140,8 +92,8 @@ Test::Unit Factorial_test_1(
 	for (auto &kv : Global<C_operative>::dir())
 		env.define(new Symbol(kv.first), kv.second);
 
-	Static<Result> r;
-	Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
+	Test::Result r;
+	Test::Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
 		list("$define!"_s, "fac"_s, list("$lambda"_s, list("n"_s),
 			list("$if"_s, list("zero?"_s, "n"_s),
 				1_a,
@@ -149,6 +101,7 @@ Test::Unit Factorial_test_1(
 
 		list("fac"_s, 10_a)
 	))), &r);
+
 	for (Continuation &cc : program)
 	{
 		//std::cerr << cc.state() << std::endl;
@@ -172,8 +125,8 @@ Test::Unit Factorial_test_2(
 	for (auto &kv : Global<C_operative>::dir())
 		env.define(new Symbol(kv.first), kv.second);
 
-	Static<Result> r;
-	Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
+	Test::Result r;
+	Test::Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
 		list("$define!"_s, "fac"_s, list("$lambda"_s, list("n"_s),
 			list("$define!"_s, "loop"_s, list("$lambda"_s, list("a"_s, "b"_s),
 				list("$if"_s, list("zero?"_s, "a"_s),
