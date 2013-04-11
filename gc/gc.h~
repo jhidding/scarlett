@@ -18,9 +18,9 @@ namespace Scarlett
 
 			Log log;
 			GC(): log("gc") {}
-			void *alloc_object(size_t size);
-			void add_to_root(T *q);
-			void remove_from_root(T *q);
+			void *alloc_object(size_t size)
+			void add_to_root(T *q)
+			void remove_from_root(T *q)
 			void do_cycle();
 
 			static void cycle();
