@@ -25,7 +25,7 @@ Misc::Regex_buffer::operator const_ptr() const
 	return &buffer;
 }
 
-std::string Misc::Regex_match::operator[](size_t i)
+std::string Misc::Regex_match::operator[](size_t i) const
 {
 	if (match[i].rm_so != -1)
 		return str.substr(match[i].rm_so,

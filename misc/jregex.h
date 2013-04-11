@@ -43,7 +43,7 @@ namespace Misc
 
 		public:
 			bool is_match() const { return success; }
-			std::string operator[](size_t i);
+			std::string operator[](size_t i) const;
 			iterator begin() const;
 			iterator end() const;
 	};
