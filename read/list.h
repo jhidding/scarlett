@@ -27,6 +27,7 @@ namespace Scarlett
 		{
 			ptr rev_lst;
 			bool improper;
+			bool circular;
 
 			public:
 				ListLiteral(Continuation *parent):
@@ -41,6 +42,9 @@ namespace Scarlett
 				{
 					if (a == Improper)
 						improper = true;
+
+					if (a == Circular)
+						circular = true;
 				}
 
 				virtual Continuation *supply(ptr a)

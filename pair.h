@@ -8,19 +8,26 @@ namespace Scarlett
 	// class Pair {{{1
 	class Pair: public Object
 	{
+		mutable char _mark;
+
 		ptr a, b;
 
 		public:
-
-			Pair(ptr a_, ptr b_): a(a_), b(b_) {}
+			Pair(ptr a_, ptr b_): _mark(0), a(a_), b(b_) {}
 			ptr car() const { return a; }
 			ptr cdr() const { return b; }
+			void set_car(ptr u) { a = u; }
+			void set_cdr(ptr v) { b = v; }
+
+			void set_mark(char m) const { _mark = m; }
+			char mark() const { return _mark; }
 
 			virtual void gc(Edict const &cmd) const
 				{ cmd(a); cmd(b); }
 
 			virtual std::string type_name() const { return "pair"; }
 			virtual std::string repr() const;
+			virtual bool is_mutable() const { return true; }
 			//virtual bool is_equiv(ptr a) const;
 	}; // }}}
 
@@ -29,6 +36,10 @@ namespace Scarlett
 	inline ptr cons(ptr a, ptr b) { return new Pair(a, b); }
 	inline ptr car(ptr q) { return cast_ptr<Pair>(q)->car(); }
 	inline ptr cdr(ptr q) { return cast_ptr<Pair>(q)->cdr(); }
+	inline void set_mark(ptr q, char m) { cast_ptr<Pair>(q)->set_mark(m); }
+	inline char mark(ptr q) { return cast_ptr<Pair>(q)->mark(); }
+	inline ptr set_car(ptr q, ptr a) { cast_ptr<Pair>(q)->set_car(a); return &inert; }
+	inline ptr set_cdr(ptr q, ptr a) { cast_ptr<Pair>(q)->set_cdr(a); return &inert; }
 
 	inline ptr list() { return &nil; }
 
@@ -136,9 +147,16 @@ namespace Scarlett
 
 	extern void match_tree(ptr a, ptr b, std::function<void (ptr, ptr)> const &f);
 	extern bool pair_equiv(ptr a, ptr b);
-	// returns reverse of a list, assumes that <a> is a proper list
+
 	extern ptr reverse(ptr a);
 	extern ptr append_reverse(ptr a, ptr b);
+	extern ptr unzip(ptr a);
+	extern ptr list_tail(ptr a, int i);
+	extern ptr encycle(ptr a, int i, int j);
+
+	ptr deep_mark(ptr a, char m);
+	bool deep_compare(ptr a_, ptr b_, char m);
+	bool deep_congruence(ptr a_, ptr b_, char m);
 	// }}}
 }
 

@@ -10,7 +10,7 @@ namespace Scarlett
 {
 	namespace Read
 	{
-		enum Msg { Improper };
+		enum Msg { Improper, Circular };
 
 		class Reader: public Continuation
 		{

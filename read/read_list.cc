@@ -1,6 +1,7 @@
 #include "list.h"
 #include "hash.h"
 #include "sign.h"
+#include "ellipsis.h"
 
 using namespace Scarlett;
 using namespace Read;
@@ -16,6 +17,12 @@ Continuation *Scarlett::Read::Dot::put(int ch)
 	if (isdigit(ch))
 	{
 		return cast_ptr<Reader>((new Number(parent()))->put('.'))->put(ch);
+	}
+
+	if (ch == '.')
+	{
+		cast_ptr<Reader>(parent())->poke(Circular);
+		return new Ellipsis(parent());
 	}
 
 	throw Exception(ERROR_syntax, 
@@ -41,8 +48,15 @@ Continuation *Scarlett::Read::ListLiteral::put(int ch)
 	{
 		if (improper)
 			return parent()->supply(append_reverse(cdr(rev_lst), car(rev_lst)));
-		else
-			return parent()->supply(reverse(rev_lst));
+
+		if (circular)
+		{
+			ptr p = reverse(rev_lst);
+			encycle(p, proper_list_length(p) - 1, 1);
+			return parent()->supply(p);
+		}
+
+		return parent()->supply(reverse(rev_lst));
 	}
 
 	if (ch == EOF)

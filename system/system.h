@@ -17,6 +17,7 @@ namespace Scarlett
 	extern Global<C_operative> If;
 	extern Global<C_operative> Define;
 	extern Global<C_operative> Lambda;
+	extern Global<C_operative> Let;
 
 	extern Global<C_applicative> Wrap;
 	extern Global<C_applicative> Unwrap;

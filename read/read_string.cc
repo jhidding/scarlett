@@ -22,13 +22,13 @@ Test::Unit Read_string_test(
 {
 	Static<Environment> env(&nil);
 	ptr expr = list(
-		"(func 4 5 6)\n 89.48@3.14\n ((lambda (x . y) (+ x (car y))) 1 2 3 4 +i)\n"_a);
+		"(func 4 5 6 ...)\n 89.48@3.14\n ((lambda (x . y) (+ x (car y))) 1 2 3 4 +i)\n"_a);
 	Test::Result r;
 	Test::Program program(read_string(&r, &env, expr), &r);
 
 	for (auto &cc : program) 
 	{
-//		std::cerr << cc.state() << std::endl;
+		std::cerr << cc.state() << std::endl;
 	}
 
 	GC<Object>::cycle();

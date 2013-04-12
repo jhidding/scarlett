@@ -1,5 +1,6 @@
 #pragma once
 #include "../object.h"
+#include "system.h"
 #include "environment.h"
 #include "continuation.h"
 #include "combiners.h"
