@@ -20,7 +20,7 @@ class ApplyWith: public Operative
 
 Continuation *internal_eval(Continuation *cc, Environment *env, ptr expr)
 {
-//	std::cerr << "eval: " << expr->repr() << std::endl;
+//	std::cerr << "eval: " << deep_list_repr(expr) << std::endl;
 	expr = car(expr);
 
 	if (is_symbol(expr)) 

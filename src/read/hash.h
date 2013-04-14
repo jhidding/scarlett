@@ -25,7 +25,8 @@ namespace Scarlett
 						{"f", [] () { return new Boolean(false); }},
 						{"nil", [] () { return &nil; }},
 						{"inert", [] () { return &inert; }},
-						{"ignore", [] () { return &ignore; }}};
+						{"ignore", [] () { return &ignore; }},
+						{"infinity", [] () { return &infinity; }}};
 
 					if (isspace(ch) or ch == ')' or ch == '(')
 					{
@@ -64,7 +65,7 @@ namespace Scarlett
 					if (isspace(ch) or ch == ')')
 						throw Exception(ERROR_syntax, "# cannot be followed by ')' or ' '.");
 
-					return new SpecialLiteral(parent());
+					return (new SpecialLiteral(parent()))->put(ch);
 				}
 		};
 	}

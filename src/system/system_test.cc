@@ -64,11 +64,7 @@ Test::Unit List_of_apps_test(
 			list("+"_s, list("+"_s, "x"_s, "x"_s), "y"_s)),
 			2_a, 7_a))), &r);
 
-	for (Continuation &cc : program)
-	{
-		//std::cerr << cc.state() << std::endl;
-		GC<Object>::cycle();
-	}
+	program.run();
 	std::cerr << r.result()->repr() << std::endl;
 
 	return true;
@@ -97,10 +93,7 @@ Test::Unit Factorial_test_1(
 		list("fac"_s, 10_a)
 	))), &r);
 
-	for (Continuation &cc : program)
-	{
-		//std::cerr << cc.state() << std::endl;
-	}
+	program.run();
 	std::cerr << r.result()->repr() << std::endl;
 	GC<Object>::cycle();
 
@@ -133,12 +126,7 @@ Test::Unit Factorial_test_2(
 		list("fac"_s, 10_a)
 	))), &r);
 
-	for (Continuation &cc : program)
-	{
-		//std::cerr << cc.state() << std::endl;
-		//GC<Object>::cycle();
-	}
-
+	program.run();
 	std::cerr << r.result()->repr() << std::endl;
 	GC<Object>::cycle();
 

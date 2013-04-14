@@ -2,6 +2,11 @@
 
 using namespace Scarlett;
 
+ptr Scarlett::transpose(ptr a)
+{
+	
+}
+
 ptr Scarlett::unzip(ptr a)
 {
 	ptr b = &nil, c = &nil;
