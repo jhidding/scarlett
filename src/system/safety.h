@@ -32,6 +32,25 @@ namespace Scarlett
 			virtual bool operator()(ptr a) const = 0;
 	};
 
+	class Congruent_with: public Assertion
+	{
+		ptr pattern;
+		public:
+			Congruent_with(ptr pattern_):
+				pattern(car(pattern_)) {}
+
+			virtual std::string description() const
+			{
+				return Misc::format("Arguments should be congruent with ",
+					deep_list_repr(pattern));
+			}
+
+			bool operator()(ptr a) const
+			{
+				return deep_congruence(pattern, a);
+			}
+	};
+
 	class Has_proper_length: public Assertion
 	{
 		int expect;

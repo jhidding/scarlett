@@ -1,7 +1,15 @@
 #include "pair.h"
+#include "stack.h"
+#include "misc/format.h"
 
 using namespace Scarlett;
 
+std::string Scarlett::Pair::repr() const
+{
+	return Misc::format("(", int(mark()), ": ", a->spec(), " . ", b->spec(), ")");
+}
+
+/*
 std::string Scarlett::Pair::repr() const
 {
 	std::ostringstream ss;
@@ -29,8 +37,8 @@ std::string Scarlett::Pair::repr() const
 		ss << " . " << p->repr() << ")";
 
 	deep_mark(b, 0);
-	set_mark(0);
+	deep_mark(a, 0);
 
 	return ss.str();
 }
-
+*/

@@ -14,6 +14,7 @@ Continuation *Scarlett::read_string(Continuation *C, Environment *env, ptr args)
 #ifdef UNITTEST
 #include "../unittest/test.h"
 #include "../pair.h"
+#include "../system/program.h"
 
 Test::Unit Read_string_test(
 	"0105 - read-string",
@@ -22,17 +23,14 @@ Test::Unit Read_string_test(
 {
 	Static<Environment> env(&nil);
 	ptr expr = list(
-		"(func 4 5 6 ...)\n 89.48@3.14\n ((lambda (x . y) (+ x (car y))) 1 2 3 4 +i)\n"_a);
-	Test::Result r;
-	Test::Program program(read_string(&r, &env, expr), &r);
-
-	for (auto &cc : program) 
-	{
-		std::cerr << cc.state() << std::endl;
-	}
+		"((1 2) (3 4) (5 6))\n (func 4 5 6 ...)\n 89.48@3.14\n"
+		"((lambda (x . y) (+ x (car y))) 1 2 3 4 +i)\n"_a);
+	Result r;
+	Program program(read_string(&r, &env, expr), &r);
+	program.run();
 
 	GC<Object>::cycle();
-	std::cerr << r.result()->repr() << std::endl;
+	std::cerr << deep_list_repr(r.result()) << std::endl;
 
 	return true;
 });

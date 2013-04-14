@@ -31,7 +31,7 @@ namespace Scarlett
 
 			public:
 				ListLiteral(Continuation *parent):
-					Reader(parent), rev_lst(&nil), improper(false) {}
+					Reader(parent), rev_lst(&nil), improper(false), circular(false) {}
 
 				virtual void gc(Edict const &cmd) 
 					{ Reader::gc(cmd); cmd(rev_lst); }

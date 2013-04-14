@@ -36,6 +36,15 @@ namespace Scarlett
 			}
 	};
 
+	inline void load_global_env(Environment &env)
+	{
+		for (auto &kv : Global<C_applicative>::dir())
+			env.define(new Symbol(kv.first), kv.second);
+
+		for (auto &kv : Global<C_operative>::dir())
+			env.define(new Symbol(kv.first), kv.second);
+	}
+
 	template <typename T>
 	std::unique_ptr<std::map<std::string, T *>> Scarlett::Global<T>::_dir;
 }

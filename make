@@ -16,7 +16,7 @@
 #	structure, which is even better)
 
 target="scarlett"
-objdir=".obj"
+objdir="obj"
 LDFLAGS="-lm -lrt -fopenmp -pg"
 CFLAGS="-Wall -g -std=c++0x -fopenmp -pg"
 
@@ -28,8 +28,8 @@ ECHO="echo -e"
 #>=----- you shouldn't need to edit below this line -----=<#
 #\>==--------                                  --------==>/#
 
-DIRS=`find . -maxdepth 1 -type d -name '[^\.]*'`
-CCFILES=`find . -maxdepth 2 -wholename "./[^.]*$ext"`
+DIRS=`find src -maxdepth 1 -type d -name '[^\.]*'`
+CCFILES=`find src -maxdepth 2 -wholename "[^.]*$ext"`
 
 case "$TERM" in
 	dumb)
@@ -71,7 +71,12 @@ checknewer() {
 }
 
 compile() {
-	objf=$objdir/$(basename $1 $ext).o
+	dirn=$objdir/$(dirname $1)
+	if [ ! -e $dirn ]; then
+		mkdir $dirn
+	fi
+
+	objf=$dirn/$(basename $1 $ext).o
 	deps=`$CC -MM $1 $CFLAGS | sed -e '{ s/^.*: //; s/\\\//; s/^ *// }'`
 	if checknewer $objf "$deps"; then
 		if prettyprint "$CC -c $CFLAGS $1 -o $objf" 34 "Compiling $1 ... "; then
@@ -81,7 +86,12 @@ compile() {
 }
 
 compile_unittest() {
-	objf=$objdir/$(basename $1 $ext).test.o
+	dirn=$objdir/test/$(dirname $1)
+	if [ ! -e $dirn ]; then
+		mkdir $dirn
+	fi
+
+	objf=$dirn/$(basename $1 $ext).o
 	deps=`$CC -MM $1 -DUNITTEST $CFLAGS | sed -e '{ s/^.*: //; s/\\\//; s/^ *// }'`
 	if checknewer $objf "$deps"; then
 		if prettyprint "$CC -c $CFLAGS $1 -DUNITTEST -o $objf" 34 "Compiling unit test $1 ... "; then
@@ -103,8 +113,9 @@ case "$1" in
 			compile $f
 		done
 
-		if checknewer $target "`ls $objdir/*.o`"; then
-			if prettyprint "$CC $objdir/*.o -o $target $LDFLAGS" 36 "Linking ..."; then
+		objfiles=$(find $objdir/test -name '*.o')
+		if checknewer $target "$objfiles"; then
+			if prettyprint "$CC $objfiles -o $target $LDFLAGS" 36 "Linking ..."; then
 				exit 1
 			fi
 		else
@@ -112,12 +123,17 @@ case "$1" in
 		fi ;;
 
 	build-test)
+		if [ ! -e $objdir/test ]; then
+			mkdir $objdir/test
+		fi
+
 		for f in $CCFILES; do
 			compile_unittest $f
 		done
 
-		if checknewer ${target}.test "`ls $objdir/*.test.o`"; then
-			if prettyprint "$CC $objdir/*.test.o -o ${target}.test $LDFLAGS" 36 "Linking test ..."; then
+		objfiles=$(find $objdir/test -name '*.o')
+		if checknewer ${target}.test "$objfiles"; then
+			if prettyprint "$CC $objfiles -o ${target}.test $LDFLAGS" 36 "Linking test ..."; then
 				exit 1
 			fi
 		else

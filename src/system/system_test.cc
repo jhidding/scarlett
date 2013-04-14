@@ -4,6 +4,7 @@
 #include "system.h"
 #include "mapper.h"
 #include "../iface.h"
+#include "program.h"
 
 using namespace Scarlett;
 
@@ -13,7 +14,6 @@ class Square: public Operative
 		virtual Continuation *operator()(Continuation *C,
 			Environment *env, ptr args)
 		{
-			std::cerr << "square getting: " << args->repr() << std::endl;
 			unsigned i = cast_ptr<Atom<unsigned>>(car(args))->value();
 			return C->supply(new Atom<unsigned>(i*i));
 		}
@@ -33,16 +33,11 @@ Test::Unit Mapper_test(
 	"Performs a sequential mapping.",
 	[] ()
 {
-	Test::Result r;
+	Result r;
 	ptr a = list(1_a, 2_a, 3_a, 4_a, 5_a);
 
-	for (Continuation &cc : Test::Program(new Mapper(&r, NULL, new Square, a), &r))
-	{
-		std::cerr << cc.state() << std::endl;
-		GC<Object>::cycle();
-	}
-
-	std::cerr << r.result()->repr() << std::endl;
+	Program(new Mapper(&r, NULL, new Square, a), &r).run();
+	std::cerr << deep_list_repr(r.result()) << std::endl;
 
 	return true;
 });
@@ -63,8 +58,8 @@ Test::Unit List_of_apps_test(
 
 /*	env.print_map(std::cerr); */
 
-	Test::Result r;
-	Test::Program program(apply(&r, &env, &Eval, list(
+	Result r;
+	Program program(apply(&r, &env, &Eval, list(
 		list(list("$lambda"_s, list("x"_s, "y"_s), 
 			list("+"_s, list("+"_s, "x"_s, "x"_s), "y"_s)),
 			2_a, 7_a))), &r);
@@ -92,8 +87,8 @@ Test::Unit Factorial_test_1(
 	for (auto &kv : Global<C_operative>::dir())
 		env.define(new Symbol(kv.first), kv.second);
 
-	Test::Result r;
-	Test::Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
+	Result r;
+	Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
 		list("$define!"_s, "fac"_s, list("$lambda"_s, list("n"_s),
 			list("$if"_s, list("zero?"_s, "n"_s),
 				1_a,
@@ -125,8 +120,8 @@ Test::Unit Factorial_test_2(
 	for (auto &kv : Global<C_operative>::dir())
 		env.define(new Symbol(kv.first), kv.second);
 
-	Test::Result r;
-	Test::Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
+	Result r;
+	Program program(apply(&r, &env, &Eval, list(list("$sequence"_s,
 		list("$define!"_s, "fac"_s, list("$lambda"_s, list("n"_s),
 			list("$define!"_s, "loop"_s, list("$lambda"_s, list("a"_s, "b"_s),
 				list("$if"_s, list("zero?"_s, "a"_s),

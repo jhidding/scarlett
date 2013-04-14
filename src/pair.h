@@ -155,8 +155,9 @@ namespace Scarlett
 	extern ptr encycle(ptr a, int i, int j);
 
 	ptr deep_mark(ptr a, char m);
-	bool deep_compare(ptr a_, ptr b_, char m);
-	bool deep_congruence(ptr a_, ptr b_, char m);
+	bool deep_compare(ptr a_, ptr b_);
+	bool deep_congruence(ptr a_, ptr b_);
+	std::string deep_list_repr(ptr a_);
 	// }}}
 }
 
