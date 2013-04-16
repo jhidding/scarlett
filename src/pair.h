@@ -87,10 +87,15 @@ namespace Scarlett
 	extern ptr encycle(ptr a, int i, int j);
 
 	extern ptr length(ptr a);
-	ptr deep_mark(ptr a, char m);
-	bool deep_compare(ptr a_, ptr b_);
-	bool deep_congruence(ptr a_, ptr b_);
-	std::string deep_list_repr(ptr a_);
+	extern ptr deep_mark(ptr a, char m);
+	extern bool deep_compare(ptr a_, ptr b_);
+	extern bool deep_congruence(ptr a_, ptr b_);
+	extern std::string deep_list_repr(ptr a_);
+	extern ptr get_list_metric(ptr a);
+
+	struct List_metric { int p, n, a, c; };
+	extern List_metric c_get_list_metric(ptr a);
+	extern ptr get_list_metric(ptr a);
 	// }}}
 
 	// class ListIterator {{{1

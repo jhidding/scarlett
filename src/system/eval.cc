@@ -37,7 +37,7 @@ Continuation *internal_eval(Continuation *cc, Environment *env, ptr expr)
 
 		if (is_applicative(comb))
 		{
-			return eval_args_and_apply(cc, env, cast_ptr<Combiner>(comb), args);
+			return eval_args_and_apply(cc, env, cast_ptr<Applicative>(comb), args);
 		}
 		
 		if (is_operative(comb))	

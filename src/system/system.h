@@ -10,6 +10,7 @@
 #include "combiners.h"
 #include "mapper.h"
 #include "global.h"
+#include "multimap.h"
 
 namespace Scarlett
 {
@@ -29,10 +30,11 @@ namespace Scarlett
 	extern Global<C_applicative> Make_environment;
 	extern Global<C_applicative> Map;
 
-	inline Continuation *eval_args_and_apply(Continuation *cc, Environment *env, Combiner *comb, ptr args)
+	inline Continuation *eval_args_and_apply(Continuation *cc, Environment *env, 
+			Applicative *comb, ptr args)
 	{	
 		Continuation *nc = new Apply(cc, env, comb);
-		return new Mapper(nc, env, &Eval, args);
+		return new Multi_map(nc, env, &Eval, list(args));
 	}
 
 	inline Continuation *apply(Continuation *cc, Environment *env, Combiner *comb, ptr args)

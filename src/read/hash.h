@@ -3,6 +3,7 @@
 #include "comment.h"
 #include "char.h"
 #include "vector.h"
+#include "../numeric/numeric.h"
 
 namespace Scarlett
 {

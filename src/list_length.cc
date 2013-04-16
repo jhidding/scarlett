@@ -1,4 +1,5 @@
 #include "pair.h"
+#include "numeric/numeric.h"
 
 using namespace Scarlett;
 
