@@ -12,7 +12,7 @@ Continuation *internal_vau(Continuation *C, Environment *env, ptr args)
 	ptr dyn_env_sym = cadr(args);
 	ptr body 	= cddr(args);
 
-	return C->supply(new Closure(env, dyn_env_sym, tree, body));
+	return C->supply(new Closure(env, dyn_env_sym, tree, copy_es_immutable(body)));
 }
 
 Continuation *internal_lambda(Continuation *C, Environment *env, ptr args)
@@ -22,7 +22,7 @@ Continuation *internal_lambda(Continuation *C, Environment *env, ptr args)
 	ptr tree = car(args);
 	ptr body = cdr(args);
 
-	return C->supply((new Closure(env, &ignore, tree, body))->wrap());
+	return C->supply((new Closure(env, &ignore, tree, copy_es_immutable(body)))->wrap());
 }
 
 Global<C_operative> Scarlett::Vau("$vau", internal_vau);

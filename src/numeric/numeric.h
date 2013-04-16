@@ -1,6 +1,5 @@
 #pragma once
 #include "../object.h"
-#include "inf.h"
 
 namespace Scarlett
 {

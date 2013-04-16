@@ -56,7 +56,7 @@ Test::Unit List_of_apps_test(
 	for (auto &kv : Global<C_operative>::dir())
 		env.define(new Symbol(kv.first), kv.second);
 
-/*	env.print_map(std::cerr); */
+	env.print_map(std::cerr);
 
 	Result r;
 	Program program(apply(&r, &env, &Eval, list(

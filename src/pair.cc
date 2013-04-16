@@ -63,4 +63,7 @@ Continuation *internal_list_star(Continuation *C, Environment *env, ptr args)
 Global<C_applicative> ListFunc("list", internal_list);
 Global<C_applicative> ListStarFunc("list*", internal_list_star);
 
+Global<C_applicative> Set_car("set-car!", Curry<ptr, ptr, ptr>(set_car));
+Global<C_applicative> Set_cdr("set-cdr!", Curry<ptr, ptr, ptr>(set_cdr));
+Global<C_applicative> Copy_es_immutable("copy-es-immutable", Curry<ptr, ptr>(copy_es_immutable));
 

@@ -17,8 +17,8 @@
 
 target="scarlett"
 objdir="obj"
-LDFLAGS="-lm -lrt -fopenmp -pg"
-CFLAGS="-Wall -g -std=c++0x -fopenmp -pg"
+LDFLAGS="-lm -lrt -fopenmp"
+CFLAGS="-Wall -g -std=c++0x -fopenmp -O2"
 
 CC="g++"
 ext=".cc"
@@ -73,7 +73,7 @@ checknewer() {
 compile() {
 	dirn=$objdir/$(dirname $1)
 	if [ ! -e $dirn ]; then
-		mkdir $dirn
+		mkdir -p $dirn
 	fi
 
 	objf=$dirn/$(basename $1 $ext).o
@@ -88,7 +88,7 @@ compile() {
 compile_unittest() {
 	dirn=$objdir/test/$(dirname $1)
 	if [ ! -e $dirn ]; then
-		mkdir $dirn
+		mkdir -p $dirn
 	fi
 
 	objf=$dirn/$(basename $1 $ext).o
@@ -163,7 +163,7 @@ case "$1" in
 		fi;;
 
 	clean)
-		rm -rf $target $objdir
+		rm -rf $target $objdir ${target}.test
 		find . -name '*~' -exec rm {} \; ;;
 
 	*)

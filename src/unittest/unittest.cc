@@ -20,7 +20,6 @@ void Unit::all()
 
 	for (auto &kv : instances())
 	{
-		Scarlett::GC<Scarlett::Object>::cycle();
 		log.entry(kv.first);
 
 		std::cerr << "[test \033[34;1m" << kv.first << "\033[m]\n";
@@ -50,6 +49,8 @@ void Unit::all()
 						[] () -> std::string { return " | "; })
 				<< std::endl;
 		}
+
+		Scarlett::GC<Scarlett::Object>::cycle();
 	}
 }
 

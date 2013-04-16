@@ -8,6 +8,7 @@ std::unique_ptr<GC<Object>> Object::_gc_ptr;
 Static<Special> Scarlett::inert(Special("inert"));
 Static<Special> Scarlett::ignore(Special("ignore"));
 Static<Special> Scarlett::nil(Special("nil"));
+Static<Special> Scarlett::infinity(Special("infinity"));
 
 bool Scarlett::is_equal(ptr a, ptr b)
 {

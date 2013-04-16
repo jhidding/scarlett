@@ -9,15 +9,32 @@ namespace Scarlett
 	class Pair: public Object
 	{
 		mutable char _mark;
+		bool _mute;
 
 		ptr a, b;
 
 		public:
-			Pair(ptr a_, ptr b_): _mark(0), a(a_), b(b_) {}
+			Pair(ptr a_, ptr b_, bool mute_ = true): 
+				_mark(0), _mute(mute_),
+				a(a_), b(b_) 
+			{}
+
 			ptr car() const { return a; }
 			ptr cdr() const { return b; }
-			void set_car(ptr u) { a = u; }
-			void set_cdr(ptr v) { b = v; }
+
+			void set_car(ptr u)
+			{ 
+				if (not _mute) 
+					throw Exception(ERROR, "cannot mutate a non-mutable pair.");
+				a = u;
+			}
+
+			void set_cdr(ptr v) 
+			{ 
+				if (not _mute) 
+					throw Exception(ERROR, "cannot mutate a non-mutable pair.");
+				b = v; 
+			}
 
 			void set_mark(char m) const { _mark = m; }
 			char mark() const { return _mark; }
@@ -27,7 +44,9 @@ namespace Scarlett
 
 			virtual std::string type_name() const { return "pair"; }
 			virtual std::string repr() const;
-			virtual bool is_mutable() const { return true; }
+			virtual bool is_mutable() const { return _mute; }
+			
+			void set_mutable(bool a) { _mute = a; }
 			//virtual bool is_equiv(ptr a) const;
 	}; // }}}
 
@@ -40,12 +59,14 @@ namespace Scarlett
 	inline char mark(ptr q) { return cast_ptr<Pair>(q)->mark(); }
 	inline ptr set_car(ptr q, ptr a) { cast_ptr<Pair>(q)->set_car(a); return &inert; }
 	inline ptr set_cdr(ptr q, ptr a) { cast_ptr<Pair>(q)->set_cdr(a); return &inert; }
-
 	inline ptr list() { return &nil; }
 
 	template <typename ...Args>
 	inline ptr list(ptr a, Args &&...args)
 	{ return cons(a, list(std::forward<Args>(args)...)); }
+
+	ptr copy_es_immutable(ptr a);
+	ptr for_each_pair(ptr a_, std::function<void (ptr)> const &f);
 	// }}}
 	
 	// functions that do something {{{1

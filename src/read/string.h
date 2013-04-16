@@ -11,7 +11,7 @@ namespace Scarlett
 
 			for (char ch : s)
 			{
-				int b;
+				int b = -1;
 
 				if (isdigit(ch))
 				{
@@ -27,6 +27,9 @@ namespace Scarlett
 				{
 					b = ch - 'A' + 10;
 				}
+
+				if (b == -1)
+					throw Exception(ERROR, "encountered non-hex char in hex-code.");
 
 				a = a * 16 + b;
 			}

@@ -128,6 +128,7 @@ namespace Scarlett
 	extern Static<Special> inert;
 	extern Static<Special> ignore;
 	extern Static<Special> nil;
+	extern Static<Special> infinity;
 
 	inline bool is_nil(ptr q) { return q == &nil; }
 	inline bool is_ignore(ptr q) { return q == &ignore; }

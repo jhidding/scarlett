@@ -1,9 +1,6 @@
-#include "inf.h"
 #include "numeric.h"
 
 using namespace Scarlett;
-
-Static<Special> Scarlett::infinity(Special("infinity"));
 
 int Scarlett::gcd(int a, int b)
 {
