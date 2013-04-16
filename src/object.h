@@ -72,6 +72,9 @@ namespace Scarlett
 			void *operator new(size_t size)
 				{ throw Exception(ERROR_memory, "cannot allocate a Static<> object."); }
 
+			void operator delete(void *)
+				{ throw Exception(ERROR_memory, "cannot delete a Static<> object."); }
+
 			Static()
 			{
 				T::add_to_root();
@@ -90,7 +93,7 @@ namespace Scarlett
 				T::add_to_root();
 			}
 
-			~Static()
+			virtual ~Static()
 			{
 				T::remove_from_root();
 			}
@@ -116,7 +119,7 @@ namespace Scarlett
 
 	class Special: public Object
 	{
-		std::string m_name;
+		std::string const m_name;
 
 		public:
 			Special(std::string const &name): m_name(name) {}

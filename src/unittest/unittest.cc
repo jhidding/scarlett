@@ -51,6 +51,10 @@ void Unit::all()
 		}
 
 		Scarlett::GC<Scarlett::Object>::cycle();
+
+		/*std::string s; std::cout << "stop? ";
+		std::cin >> s;
+		if (s == "ja") break;*/
 	}
 }
 

@@ -3,12 +3,12 @@
 
 using namespace Scarlett;
 
-std::unique_ptr<GC<Object>> Object::_gc_ptr;
+std::unique_ptr<GC<Object>> Scarlett::Object::_gc_ptr;
 
-Static<Special> Scarlett::inert(Special("inert"));
-Static<Special> Scarlett::ignore(Special("ignore"));
-Static<Special> Scarlett::nil(Special("nil"));
-Static<Special> Scarlett::infinity(Special("infinity"));
+Static<Special> Scarlett::inert("inert");
+Static<Special> Scarlett::ignore("ignore");
+Static<Special> Scarlett::nil("nil");
+Static<Special> Scarlett::infinity("infinity");
 
 bool Scarlett::is_equal(ptr a, ptr b)
 {

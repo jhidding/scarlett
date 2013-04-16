@@ -32,6 +32,7 @@ ptr Scarlett::for_each_pair(ptr a_, std::function<void (ptr)> const &f)
 	return &inert;
 }
 
+
 ptr Scarlett::copy_es_immutable(ptr a_)
 {
 	std::map<ptr, ptr> AB;

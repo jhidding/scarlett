@@ -17,8 +17,8 @@
 
 target="scarlett"
 objdir="obj"
-LDFLAGS="-lm -lrt -fopenmp"
-CFLAGS="-Wall -g -std=c++0x -fopenmp -O2"
+LDFLAGS="-lm -lrt"
+CFLAGS="-Wall -g -std=c++0x -O2"
 
 CC="g++"
 ext=".cc"
@@ -86,7 +86,7 @@ compile() {
 }
 
 compile_unittest() {
-	dirn=$objdir/test/$(dirname $1)
+	dirn=${objdir}.test/$(dirname $1)
 	if [ ! -e $dirn ]; then
 		mkdir -p $dirn
 	fi
@@ -123,15 +123,11 @@ case "$1" in
 		fi ;;
 
 	build-test)
-		if [ ! -e $objdir/test ]; then
-			mkdir $objdir/test
-		fi
-
 		for f in $CCFILES; do
 			compile_unittest $f
 		done
 
-		objfiles=$(find $objdir/test -name '*.o')
+		objfiles=$(find ${objdir}.test -name '*.o')
 		if checknewer ${target}.test "$objfiles"; then
 			if prettyprint "$CC $objfiles -o ${target}.test $LDFLAGS" 36 "Linking test ..."; then
 				exit 1
@@ -163,7 +159,7 @@ case "$1" in
 		fi;;
 
 	clean)
-		rm -rf $target $objdir ${target}.test
+		rm -rf $target $objdir ${target}.test ${objdir}.test
 		find . -name '*~' -exec rm {} \; ;;
 
 	*)

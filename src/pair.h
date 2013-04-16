@@ -55,7 +55,10 @@ namespace Scarlett
 	inline ptr cons(ptr a, ptr b) { return new Pair(a, b); }
 	inline ptr car(ptr q) { return cast_ptr<Pair>(q)->car(); }
 	inline ptr cdr(ptr q) { return cast_ptr<Pair>(q)->cdr(); }
-	inline void set_mark(ptr q, char m) { cast_ptr<Pair>(q)->set_mark(m); }
+	inline void set_mark(ptr q, char m) { 
+		if (not is_pair(q))
+			throw Exception(ERROR, "can't mark ", q->repr());
+		cast_ptr<Pair>(q)->set_mark(m); }
 	inline char mark(ptr q) { return cast_ptr<Pair>(q)->mark(); }
 	inline ptr set_car(ptr q, ptr a) { cast_ptr<Pair>(q)->set_car(a); return &inert; }
 	inline ptr set_cdr(ptr q, ptr a) { cast_ptr<Pair>(q)->set_cdr(a); return &inert; }
@@ -138,9 +141,9 @@ namespace Scarlett
 			{ 
 				a = cdr(a);
 
-				if (mark(a) == 1)
+				if ((not is_pair(a)) or mark(a) == 1)
 					a = &nil;
-				else
+				else 
 					set_mark(a, 1);
 
 				return *this; 

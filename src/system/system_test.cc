@@ -28,6 +28,7 @@ Global<C_applicative> Mul("*", Curry<int, int, int>(mul));
 Global<C_applicative> Zero("zero?", Curry<bool, int>(zero));
 Global<C_applicative> Plus("+", Curry<int, int, int>(plus));
 
+/*
 Test::Unit Mapper_test(
 	"0101 - mapper",
 	"Performs a sequential mapping.",
@@ -99,7 +100,7 @@ Test::Unit Factorial_test_1(
 
 	return true;
 });
-
+*/
 Test::Unit Factorial_test_2(
 	"0104 - slightly less simple factorial function",
 	"compute 10 factorial by tail-recursive way",
