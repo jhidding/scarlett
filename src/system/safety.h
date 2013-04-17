@@ -3,6 +3,7 @@
 #include "../pair.h"
 #include "../exception.h"
 #include "../misc/format.h"
+#include "../read/read.h"
 #include <utility>
 #include <string>
 
@@ -28,9 +29,60 @@ namespace Scarlett
 	class Assertion
 	{
 		public:
+			virtual std::string type_name() { return "assertion"; }
 			virtual std::string description() const = 0;
 			virtual bool operator()(ptr a) const = 0;
 	};
+
+	class Or_assertion: public Assertion
+	{
+		Assertion A, B;
+
+		public:
+			Or_assertion(Assertion const &A_, Assertion const &B_):
+				A(A_), B(B_) {}
+
+			std::string description() const
+			{
+				return Misc::format(A.description(),
+					" or ", B.description());
+			}
+
+			bool operator()(ptr a) const
+			{
+				return A(a) or B(a);
+			}
+	};
+
+	class And_assertion: public Assertion
+	{
+		Assertion A, B;
+
+		public:
+			And_assertion(Assertion const &A_, Assertion const &B_):
+				A(A_), B(B_) {}
+
+			std::string description() const
+			{
+				return Misc::format(A.description(),
+					" and ", B.description());
+			}
+
+			bool operator()(ptr a) const
+			{
+				return A(a) and B(a);
+			}
+	};
+
+	Assertion operator&&(Assertion const &A, Assertion const &B)
+	{
+		return And_assertion(A, B);
+	}
+
+	Assertion operator||(Assertion const &A, Assertion const &B)
+	{
+		return Or_assertion(A, B);
+	}
 
 	class Congruent_with: public Assertion
 	{
@@ -38,6 +90,9 @@ namespace Scarlett
 		public:
 			Congruent_with(ptr pattern_):
 				pattern(car(pattern_)) {}
+
+			virtual void gc(Edict const &cmd) const
+				{ cmd(pattern); }
 
 			virtual std::string description() const
 			{

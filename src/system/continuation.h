@@ -55,6 +55,11 @@ namespace Scarlett
 			// continuation.
 			virtual Continuation *apply() = 0;
 	};
+
+	inline bool is_continuation(ptr a)
+		{ return a->type_name() == "continuation"; }
+
+	extern Global<C_applicative> Scarlett::Call_CC;
 }
 
 // vim:sw=4:ts=4:tw=72
