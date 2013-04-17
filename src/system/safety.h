@@ -76,12 +76,12 @@ namespace Scarlett
 			}
 	};
 
-	And_assertion operator&&(Assertion const &A, Assertion const &B)
+	inline And_assertion operator&&(Assertion const &A, Assertion const &B)
 	{
 		return And_assertion(A, B);
 	}
 
-	Or_assertion operator||(Assertion const &A, Assertion const &B)
+	inline Or_assertion operator||(Assertion const &A, Assertion const &B)
 	{
 		return Or_assertion(A, B);
 	}

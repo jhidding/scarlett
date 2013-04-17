@@ -3,6 +3,32 @@
 
 using namespace Scarlett;
 
+#ifdef UNITTEST
+#include "../unittest/test.h"
+#include "program.h"
+
+Test::Unit Continuation_test(
+	"0300 - call/cc",
+	"call/cc calls the argument applicative with the current "
+	"continuation as its single argument.",
+	[] ()
+{
+	Static<Environment> env(&nil);
+	load_global_env(env);
+	Result r;
+
+	ptr code = "(call/cc ($lambda (c) ((continuation->applicative c) . 42) 12))"_e;
+
+	std::cerr << deep_list_repr(code) << std::endl;
+	Program(apply(&r, &env, &Eval, list(cons(&Sequence, code))), &r).run();
+	//std::cerr << deep_list_repr(r.result()) << std::endl;
+	std::cerr << r.result()->repr() << std::endl;
+	
+	return true;	
+});
+
+#endif
+
 Continuation *internal_call_cc(Continuation *C, Environment *env, ptr args)
 {
 	assert_that("call/cc", args, Congruent_with("(<combiner>)"_e));

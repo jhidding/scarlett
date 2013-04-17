@@ -100,10 +100,6 @@ compile_unittest() {
 	fi
 }
 
-if [ ! -e $objdir ]; then
-	mkdir $objdir
-fi
-
 case "$1" in
 	single)
 		compile $2 ;;
@@ -113,7 +109,7 @@ case "$1" in
 			compile $f
 		done
 
-		objfiles=$(find $objdir/test -name '*.o')
+		objfiles=$(find $objdir -name '*.o')
 		if checknewer $target "$objfiles"; then
 			if prettyprint "$CC $objfiles -o $target $LDFLAGS" 36 "Linking ..."; then
 				exit 1

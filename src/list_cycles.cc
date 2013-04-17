@@ -206,7 +206,7 @@ std::string Scarlett::deep_list_repr(ptr a_)
 
 		if (not is_pair(a))
 		{
-			ss << " . " << a->repr() << ") ";
+			ss << ". " << a->repr() << ") ";
 			continue;
 		}
 

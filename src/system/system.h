@@ -34,19 +34,11 @@ namespace Scarlett
 	extern Global<C_applicative> Extend_continuation;
 	extern Global<C_applicative> Continuation_to_applicative;
 
-	inline Continuation *eval_args_and_apply(Continuation *cc, Environment *env, 
-			Applicative *comb, ptr args)
-	{	
-		Continuation *nc = new Apply(cc, env, comb);
-		return new Multi_map(nc, env, &Eval, list(args));
-	}
-
 	inline Continuation *apply(Continuation *cc, Environment *env, Combiner *comb, ptr args)
 	{
 		Continuation *nc = new Apply(cc, env, comb);
 		return nc->supply(args);
 	}
-
 }
 
 // vim:sw=4:ts=4:tw=72

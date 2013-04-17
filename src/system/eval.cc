@@ -18,6 +18,19 @@ class ApplyWith: public Operative
 		}
 };
 
+inline Continuation *eval_args_and_apply(Continuation *cc, Environment *env, 
+		Applicative *comb, ptr args)
+{
+	Continuation *nc = new Apply(cc, env, comb);
+
+	if (is_pair(args))
+	{	
+		return new Multi_map(nc, env, &Eval, list(args));
+	}
+
+	return apply(nc, env, &Eval, list(args));
+}
+
 Continuation *internal_eval(Continuation *cc, Environment *env, ptr expr)
 {
 //	std::cerr << "eval: " << deep_list_repr(expr) << std::endl;
