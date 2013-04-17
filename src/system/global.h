@@ -3,6 +3,8 @@
 #include <string>
 #include <map>
 #include "../object.h"
+#include "environment.h"
+#include "combiners.h"
 
 /*
  * All global instances of some class will

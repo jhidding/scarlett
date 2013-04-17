@@ -15,7 +15,7 @@ Continuation *internal_extend_continuation(Continuation *C, Environment *env, pt
 {
 	assert_that("extend-continuation", args, 
 		   Congruent_with("(<continuation> <applicative> <environment>)"_e)
-		or Congrunet_with("(<continuation> <applicative>"_e));
+		or Congruent_with("(<continuation> <applicative>"_e));
 
 	Continuation *e_C = cast_ptr<Continuation>(car(args));
 	Applicative *e_app = cast_ptr<Applicative>(cadr(args));
@@ -26,6 +26,7 @@ Continuation *internal_extend_continuation(Continuation *C, Environment *env, pt
 	return C->supply(new Apply(e_C, e_env, e_app)); 
 }
 
+/*
 Continuation *internal_guard_continuation(Continuation *C, Environment *env, ptr args)
 {
 	assert_that("guard-continuation", args,
@@ -43,6 +44,7 @@ Continuation *internal_guard_continuation(Continuation *C, Environment *env, ptr
 
 	return C->supply(inner);
 }
+*/
 
 Continuation *internal_continuation_to_applicative(Continuation *C, Environment *env, ptr args)
 {
@@ -51,9 +53,9 @@ Continuation *internal_continuation_to_applicative(Continuation *C, Environment 
 
 	Continuation *cc = cast_ptr<Continuation>(car(args));
 	return C->supply((new C_closure(
-		[cc] (Continuation *C, Environment *env, ptr args)
+		[cc] (Continuation *source, Environment *env, ptr args)
 	{
-		return cc->supply(args);
+		return cc->abnormal_pass(source, args);
 	}, list(cc)))->wrap());
 }
 
@@ -62,10 +64,10 @@ Global<C_applicative> Scarlett::Call_CC(
 
 Global<C_applicative> Scarlett::Extend_continuation(
 	"extend-continuation", internal_extend_continuation);
-
+/*
 Global<C_applicative> Scarlett::Guard_continuation(
 	"guard-continuation", internal_guard_continuation);
-
+*/
 Global<C_applicative> Scarlett::Continuation_to_applicative(
 	"continuation->applicative", internal_continuation_to_applicative);
 

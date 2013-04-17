@@ -36,7 +36,8 @@ namespace Scarlett
 
 	class Or_assertion: public Assertion
 	{
-		Assertion A, B;
+		Assertion const &A;
+		Assertion const &B;
 
 		public:
 			Or_assertion(Assertion const &A_, Assertion const &B_):
@@ -56,7 +57,8 @@ namespace Scarlett
 
 	class And_assertion: public Assertion
 	{
-		Assertion A, B;
+		Assertion const &A;
+		Assertion const &B;
 
 		public:
 			And_assertion(Assertion const &A_, Assertion const &B_):
@@ -74,12 +76,12 @@ namespace Scarlett
 			}
 	};
 
-	Assertion operator&&(Assertion const &A, Assertion const &B)
+	And_assertion operator&&(Assertion const &A, Assertion const &B)
 	{
 		return And_assertion(A, B);
 	}
 
-	Assertion operator||(Assertion const &A, Assertion const &B)
+	Or_assertion operator||(Assertion const &A, Assertion const &B)
 	{
 		return Or_assertion(A, B);
 	}

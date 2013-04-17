@@ -30,6 +30,10 @@ namespace Scarlett
 	extern Global<C_applicative> Make_environment;
 	extern Global<C_applicative> Map;
 
+	extern Global<C_applicative> Call_CC;
+	extern Global<C_applicative> Extend_continuation;
+	extern Global<C_applicative> Continuation_to_applicative;
+
 	inline Continuation *eval_args_and_apply(Continuation *cc, Environment *env, 
 			Applicative *comb, ptr args)
 	{	

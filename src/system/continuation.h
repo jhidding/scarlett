@@ -42,6 +42,13 @@ namespace Scarlett
 			std::string type_name() const { return "continuation"; }
 			virtual std::string state() const { return "abstract"; }
 
+			// this method is called when the continuation is called as
+			// a result of a call/cc construct. By default the arguments
+			// are just passed through normally, however we may define
+			// a specialisation that will provide continuation guarding.
+			virtual Continuation *abnormal_pass(Continuation *source, ptr args)
+				{ return this->supply(args); }
+
 			// this method is called by a function to return values
 			// it should never call any other functions, just store data
 			// if any work needs to be done on it, return *this and have
@@ -58,8 +65,6 @@ namespace Scarlett
 
 	inline bool is_continuation(ptr a)
 		{ return a->type_name() == "continuation"; }
-
-	extern Global<C_applicative> Scarlett::Call_CC;
 }
 
 // vim:sw=4:ts=4:tw=72
