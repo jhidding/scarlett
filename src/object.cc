@@ -31,6 +31,11 @@ bool Scarlett::is_equiv(ptr a, ptr b)
 	return a->is_equiv(b);
 }
 
+std::string Scarlett::repr(ptr a)
+{
+	if (is_pair(a)) return deep_list_repr(a);
+	else return a->repr();
+}
 
 #include "system/system.h"
 #include "iface.h"

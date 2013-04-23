@@ -59,11 +59,17 @@ namespace Scarlett
 				return ss.str();
 			}
 
+			virtual std::string str() const
+			{
+				return this->repr();
+			}
+
 			virtual ~Object() {}
 	};
 
 	extern bool is_equiv(ptr a, ptr b);
 	extern bool is_equal(ptr a, ptr b);
+	extern std::string repr(ptr a);
 
 	template <typename T>
 	class Static: public T

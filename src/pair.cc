@@ -48,7 +48,7 @@ Continuation *internal_list(Continuation *C, Environment *env, ptr args)
 Continuation *internal_list_star(Continuation *C, Environment *env, ptr args)
 {
 	ptr rev = reverse(args);
-	ptr result = cons(car(rev), cadr(rev));
+	ptr result = cons(cadr(rev), car(rev));
 	rev = cddr(rev);
 
 	while (not is_nil(rev))

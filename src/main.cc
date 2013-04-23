@@ -23,22 +23,21 @@ int main()
 
 #else
 
+#include "read/read.h"
+#include "system/system.h"
+
 using namespace Scarlett;
 
 int main()
 {
-	Environment *E = new Environment(
-//	Static<Environment> E(Environment(
-			list("Hello"_s, "World"_s, "Universe"_s),
-			list(1_a, 2_a, 3_a), &nil);
+	Static<Environment> env(&nil);
+	load_global_env(env);
 
-	E->print_map(std::cout);
+	Result r;
+	Program p(apply(&r, &env, &Eval, list(cons(&Sequence, read_istream(std::cin)))), &r);
+	p.run();
 
-	God<Object>::judge();
-
-	std::ofstream out("log.txt", std::ios::out);
-	Scarlett::Log::print_log_book(out);
-	out.close();
+	std::cout << repr(r.result()) << std::endl;
 	return 0;
 }
 

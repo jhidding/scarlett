@@ -7,6 +7,8 @@
 namespace Scarlett
 {
 	extern Continuation *read_string(Continuation *C, Environment *env, ptr args);
+	extern Continuation *read_input_port(Continuation *C, Environment *env, ptr args);
+	extern ptr read_istream(std::istream &in);
 
 	inline ptr operator"" _e(char const *c, size_t s)
 	{

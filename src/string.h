@@ -38,6 +38,7 @@ namespace Scarlett
 			}
 
 			std::string repr() const;
+			virtual std::string str() const { return value(); }
 	};
 
 	typedef Atom<std::string> String;

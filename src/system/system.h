@@ -11,6 +11,7 @@
 #include "mapper.h"
 #include "global.h"
 #include "multimap.h"
+#include "program.h"
 
 namespace Scarlett
 {
