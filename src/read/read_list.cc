@@ -30,11 +30,22 @@ Continuation *Scarlett::Read::Dot::put(int ch)
 			"or by white space to make a pair.");
 }
 
+#include "../listfunc.h"
+Scarlett::Read::ListLiteral::ListLiteral(Continuation *parent, int start_):
+	Reader(parent), rev_lst(&nil), 
+	improper(false), circular(false),
+	start(start_)
+{
+	if (start == '[')
+		rev_lst = cons(&ListFunc, &nil);
+}
+
 Continuation *Scarlett::Read::ListLiteral::put(int ch)
 {
 	if (ch == '#') return new Hash(this);
 	if (ch == '"') return new StringLiteral(this);
-	if (ch == '(') return new ListLiteral(this);
+	if (ch == '(') return new ListLiteral(this, '(');
+	if (ch == '[') return new ListLiteral(this, '[');
 	if (ch == ';') return new Comment(this);
 	if (ch == '.') return new Dot(this);
 	if (ch == '+' or ch == '-') return new Sign(this, ch);
@@ -44,7 +55,7 @@ Continuation *Scarlett::Read::ListLiteral::put(int ch)
 
 	if (isspace(ch)) return this;
 
-	if (ch == ')') 
+	if ((ch == ')' and start == '(') or (ch == ']' and start == '[')) 
 	{
 		if (improper)
 			return parent()->supply(append_reverse(cdr(rev_lst), car(rev_lst)));
@@ -59,6 +70,12 @@ Continuation *Scarlett::Read::ListLiteral::put(int ch)
 		return parent()->supply(reverse(rev_lst));
 	}
 
+	if (ch == ')' or ch == ']')
+		throw Exception(ERROR_syntax, 
+			"parenthesis error: ",
+			(ch == ')' ? ']' : ')'),
+			" expected.");
+
 	if (ch == EOF)
 		throw Exception(ERROR_syntax, "premature EOF");
 
@@ -67,14 +84,14 @@ Continuation *Scarlett::Read::ListLiteral::put(int ch)
 
 Continuation *Scarlett::Read::CdrLiteral::put(int ch)
 {
-	if (ch == ')') throw Exception(ERROR_syntax, 
-		"didn't expect ')' immediately after '.' ");
+	if (ch == ')' or ch == ']') throw Exception(ERROR_syntax, 
+		"didn't expect ", ch, " immediately after '.' ");
 	if (ch == '.') throw Exception(ERROR_syntax, 
 		"found erronous ' . . '");
 
 	if (ch == '#') return new Hash(parent());
 	if (ch == '"') return new StringLiteral(parent());
-	if (ch == '(') return new ListLiteral(parent());
+	if (ch == '(' or ch == '[') return new ListLiteral(parent(), ch);
 	if (ch == ';') return new Comment(this);
 	if (ch == '+' or ch == '-') return new Sign(this, ch);
 

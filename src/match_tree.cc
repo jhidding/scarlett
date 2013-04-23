@@ -5,6 +5,7 @@ using namespace Scarlett;
 
 void Scarlett::match_tree(ptr a_, ptr b_, std::function<void (ptr, ptr)> const &f)
 {
+//	std::cerr << "matching: " << repr(a_) << " -> " << repr(b_) << std::endl;;
 	Static<Stack> sa, sb;
 	sa.push(a_); sb.push(b_);
 

@@ -27,7 +27,8 @@ Test::Unit Map_test(
 #endif
 
 Multi_map::Multi_map(Continuation *C, Environment *env_, Combiner *app_, ptr src_):
-	Continuation(C), env(env_), app(app_), src(src_), tgt(&nil)
+	Continuation(C), env(env_), app(app_), src(src_), tgt(&nil), 
+	improper(false), l(0)
 {
 	src_metric = c_get_list_metric(src);
 
@@ -42,17 +43,16 @@ Multi_map::Multi_map(Continuation *C, Environment *env_, Combiner *app_, ptr src
 	deep_mark(src, 3);
 	deep_mark(src, 0);
 
-	tgt_metric = { A[0].p, 0, 0, A[0].c };
+	tgt_metric = { A[0].p, A[0].n, 0, A[0].c };
 	if (tgt_metric.c == 0)
 	{
 		for (List_metric &M : A)
 		{
-			if (not (M.c == 0 and M.p == tgt_metric.p))
+			if (not (M.c == 0 and M.p == tgt_metric.p and M.n == tgt_metric.n))
 				throw Exception(ERROR, "map arguments should have same length.");
 		}
 
 		tgt_metric.a = tgt_metric.p; 
-		tgt_metric.n = 1;
 	}
 	else
 	{
@@ -69,7 +69,10 @@ Multi_map::Multi_map(Continuation *C, Environment *env_, Combiner *app_, ptr src
 		tgt_metric.n = 0;
 	}
 
-	l = 0;
+	if (tgt_metric.n == 0 and tgt_metric.c == 0)
+	{
+		improper = true;
+	}
 }
 
 void Multi_map::gc(Edict const &cmd) const
@@ -84,10 +87,32 @@ Continuation *Multi_map::supply(ptr a)
 	return this;
 }
 
+Continuation *internal_improper(Continuation *p, Environment *env, ptr lst)
+{
+	return new Apply(p, env, new C_closure(
+		[lst] (Continuation *C, Environment *env, ptr args)
+	{
+		return C->supply(improper_reverse(lst, args));
+	}, lst));
+}
+
 Continuation *Multi_map::apply()
 {
 	if (l == tgt_metric.p)
 	{
+		if (improper)
+		{
+			ptr src_car = &nil;
+			for (ptr a : List(src))
+			{
+				src_car = cons(a, src_car);
+			}
+
+			src_car = reverse(src_car);
+			encycle(src_car, src_metric.a, src_metric.c);
+			return (*app)(internal_improper(parent(), env, tgt), env, src_car);
+		}
+
 		tgt = reverse(tgt); 
 		encycle(tgt, tgt_metric.a, tgt_metric.c);
 		return parent()->supply(tgt);

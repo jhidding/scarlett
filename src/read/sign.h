@@ -17,7 +17,9 @@ namespace Scarlett
 
 				Continuation *put(int ch)
 				{
-					if (isspace(ch) or ch == ')' or ch == '(' or ch == EOF)
+					if (isspace(ch) or ch == ')' or ch == '(' 
+							or ch == ']' or ch == '['
+							or ch == EOF)
 						return cast_ptr<Reader>((new SymbolLiteral(parent()))->put(q))->put(ch);
 
 					return cast_ptr<Reader>((new Number(parent()))->put(q))->put(ch);

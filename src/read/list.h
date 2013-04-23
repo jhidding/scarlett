@@ -23,15 +23,16 @@ namespace Scarlett
 				virtual Continuation *put(int ch);
 		};
 
+
 		class ListLiteral: public Reader
 		{
 			ptr rev_lst;
 			bool improper;
 			bool circular;
+			int start;
 
 			public:
-				ListLiteral(Continuation *parent):
-					Reader(parent), rev_lst(&nil), improper(false), circular(false) {}
+				ListLiteral(Continuation *parent, int start_);
 
 				virtual void gc(Edict const &cmd) 
 					{ Reader::gc(cmd); cmd(rev_lst); }

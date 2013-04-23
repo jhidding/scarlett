@@ -11,6 +11,7 @@ namespace Scarlett
 		ptr src, tgt;
 		
 		List_metric src_metric, tgt_metric;
+		bool improper;
 		int l;
 
 		public:

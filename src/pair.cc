@@ -60,7 +60,8 @@ Continuation *internal_list_star(Continuation *C, Environment *env, ptr args)
 	return C->supply(result);
 }
 
-Global<C_applicative> ListFunc("list", internal_list);
+#include "listfunc.h"
+Global<C_applicative> Scarlett::ListFunc("list", internal_list);
 Global<C_applicative> ListStarFunc("list*", internal_list_star);
 
 Global<C_applicative> Set_car("set-car!", Curry<ptr, ptr, ptr>(set_car));

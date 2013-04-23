@@ -19,7 +19,7 @@ namespace Scarlett
 
 				virtual Continuation *put(int ch)
 				{
-					if (isspace(ch) or ch == ')' or ch == '(')
+					if (isspace(ch) or ch == ')' or ch == '(' or ch == '[' or ch == ']')
 						return cast_ptr<Reader>(parent()->supply(string_to_number(s)))->put(ch);
 
 					s += ch;

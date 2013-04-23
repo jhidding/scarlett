@@ -14,11 +14,14 @@ namespace Scarlett
 
 		class Reader: public Continuation
 		{
-			Input_port *in;
+			Input_port 	*in;
+			size_t		line_num;
 
 			public:
 				Reader(Continuation *parent, Input_port *in_):
-					Continuation(parent), in(in_) {}
+					Continuation(parent), in(in_),
+		       			line_num(0)
+				{}
 
 				Reader(Continuation *parent):
 					Continuation(parent), in(cast_ptr<Reader>(parent)->in) {}
@@ -35,8 +38,7 @@ namespace Scarlett
 				virtual Continuation *supply(ptr a)
 					{ return parent(); }
 
-				virtual Continuation *apply()
-					{ return put(in->get()); }
+				virtual Continuation *apply();
 		};
 	}
 }

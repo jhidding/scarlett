@@ -13,3 +13,14 @@ ptr Scarlett::reverse(ptr a)
 	return p;
 }
 
+ptr Scarlett::improper_reverse(ptr a, ptr b)
+{
+	while (is_pair(a))
+	{
+		b = cons(car(a), b);
+		a = cdr(a);
+	}
+
+	return b;
+}
+

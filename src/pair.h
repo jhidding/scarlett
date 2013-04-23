@@ -105,6 +105,7 @@ namespace Scarlett
 	extern bool pair_equiv(ptr a, ptr b);
 
 	extern ptr reverse(ptr a);
+	extern ptr improper_reverse(ptr a, ptr b);
 	extern ptr append_reverse(ptr a, ptr b);
 	extern ptr unzip(ptr a);
 	extern ptr list_tail(ptr a, int i);

@@ -13,8 +13,10 @@
 ($define! fib
   ($lambda ((a b . c) n)
     ($if (zero? n)
-      (list* a b c)
-      (fib (list* (+ a b) a b c) (- n 1)))))
+      [a b . c]
+      (fib [(+ a b) a b . c] (- n 1)))))
 
-(display (fib (list 1 1) 10) "\n")
+(display (fib [1 1] 10) "\n")
+
+"bye bye!"
 

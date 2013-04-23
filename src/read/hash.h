@@ -29,7 +29,7 @@ namespace Scarlett
 						{"ignore", [] () { return &ignore; }},
 						{"infinity", [] () { return &infinity; }}};
 
-					if (isspace(ch) or ch == ')' or ch == '(')
+					if (isspace(ch) or ch == ')' or ch == '(' or ch == '[' or ch == ']')
 					{
 						auto i = lookup.find(s);
 						if (i == lookup.end())
@@ -63,7 +63,7 @@ namespace Scarlett
 					if (ch == '(')
 						return new VectorLiteral(parent());
 
-					if (isspace(ch) or ch == ')')
+					if (isspace(ch) or ch == ')' or ch == ']')
 						throw Exception(ERROR_syntax, "# cannot be followed by ')' or ' '.");
 
 					return (new SpecialLiteral(parent()))->put(ch);

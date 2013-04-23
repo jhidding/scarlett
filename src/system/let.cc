@@ -36,8 +36,10 @@ Continuation *internal_let(Continuation *C, Environment *env, ptr args)
 	ptr defs = unzip(car(args));
 	ptr body = cdr(args);
 
-	Environment *n = new Environment(car(defs), cadr(defs), list(env));
-	return apply(C, n, &Eval, list(cons(&Sequence, body)));
+	
+	//Environment *n = new Environment(car(defs), cadr(defs), list(env));
+	return apply(C, env, &Eval, list(cons(list(&Lambda, car(defs), 
+		cons(&Sequence, body)), cadr(defs))));
 }
 
 Global<C_operative> Scarlett::Let("$let", internal_let);

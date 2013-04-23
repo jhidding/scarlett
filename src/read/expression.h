@@ -41,7 +41,8 @@ namespace Scarlett
 				{
 					if (ch == '#') return new Hash(this);
 					if (ch == '"') return new StringLiteral(this);
-					if (ch == '(') return new ListLiteral(this);
+					if (ch == '(' or ch == '[') 
+						return new ListLiteral(this, ch);
 					if (ch == ';') return new Comment(this);
 					if (ch == '+' or ch == '-') return new Sign(this, ch);
 
@@ -51,7 +52,8 @@ namespace Scarlett
 
 					if (ch == EOF) return parent()->supply(reverse(rev_lst));
 
-					if (ch == ')') throw Exception(ERROR_syntax, "encountered ')' in top level.");
+					if (ch == ')' or ch == ']') 
+						throw Exception(ERROR_syntax, "encountered ')' in top level.");
 
 					return (new SymbolLiteral(this))->put(ch);
 				}
