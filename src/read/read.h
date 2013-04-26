@@ -14,7 +14,8 @@ namespace Scarlett
 	{
 		Static<Environment> env(&nil);
 		Result r;
-		Program(read_string(&r, &env, list(new String(std::string(c)))), &r).run();
+		Continuation *C = read_string(&r, &env, list(new String(std::string(c))));
+		while (C != &r) C = C->apply();
 		return r.result();
 	}
 }

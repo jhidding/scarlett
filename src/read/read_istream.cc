@@ -17,7 +17,9 @@ ptr Scarlett::read_istream(std::istream &in_)
 	Result r;
 
 	Stream_input_port *port = new Stream_input_port(in_);
-	Program(read_input_port(&r, &env, list(port)), &r).run();
+	//Program(read_input_port(&r, &env, list(port)), &r).run();
+	Continuation *C = read_input_port(&r, &env, list(port));
+	while (C != &r) C = C->apply();
 	return r.result();
 }
 

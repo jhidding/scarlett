@@ -7,10 +7,7 @@ class Juggle
 	public:
 		static void move(S &A, S &B, T q)
 		{
-			if (A.count(q) == 0) return;
-
-			A.erase(q);
-			B.insert(q);
+			if (A.erase(q))	B.insert(q);
 		}
 
 		static Juggler mover(S &A, S &B)
@@ -44,9 +41,10 @@ class Juggle
 template <typename T>
 void *Scarlett::GC<T>::alloc_object(size_t size)
 {
+	++i;
 	void *mem = ::operator new(size);
 	log.entry("new object: ", mem);
-	white.insert(reinterpret_cast<T *>(mem));
+	gray.insert(reinterpret_cast<T *>(mem));
 	return mem;
 }
 
@@ -71,9 +69,17 @@ void Scarlett::GC<T>::remove_from_root(T *q)
 }
 
 template <typename T>
-void Scarlett::GC<T>::do_cycle()
+void Scarlett::GC<T>::do_cycle(bool force = false)
 {
+	if (i < 50 and not force)
+	{
+		return;
+	}
+
+	i = 0;
 	log.time_stamp("cycle");
+	white.insert(gray.begin(), gray.end());
+	gray.clear();
 
 	// black and gray are empty, all objects in white
 	std::for_each(root.begin(), root.end(), Juggle<S>::blackener(white, gray));
@@ -97,8 +103,8 @@ void Scarlett::GC<T>::do_cycle()
 }
 
 template <typename T>
-void Scarlett::GC<T>::cycle()
+void Scarlett::GC<T>::cycle(bool force = false)
 {
-	T::_gc().do_cycle();
+	T::_gc().do_cycle(force);
 }
 

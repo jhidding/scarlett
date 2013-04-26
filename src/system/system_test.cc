@@ -19,7 +19,7 @@ class Square: public Operative
 		}
 };
 
-int plus(int a, int b) { return a + b; }
+/*int plus(int a, int b) { return a + b; }
 int mul(int a, int b) { return a * b; }
 bool zero(int a) { return a == 0; }
 int min(int a, int b) { return a - b; }
@@ -27,7 +27,7 @@ Global<C_applicative> Min("-", Curry<int, int, int>(min));
 Global<C_applicative> Mul("*", Curry<int, int, int>(mul));
 Global<C_applicative> Zero("zero?", Curry<bool, int>(zero));
 Global<C_applicative> Plus("+", Curry<int, int, int>(plus));
-
+*/
 
 Test::Unit Mapper_test(
 	"0101 - mapper",
@@ -65,7 +65,7 @@ Test::Unit List_of_apps_test(
 			list("+"_s, list("+"_s, "x"_s, "x"_s), "y"_s)),
 			2_a, 7_a))), &r);
 
-	program.run();
+	program.run(true);
 	std::cerr << r.result()->repr() << std::endl;
 
 	return true;

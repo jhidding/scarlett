@@ -17,6 +17,7 @@ namespace Scarlett
 		public:
 			Multi_map(Continuation *C, Environment *env_, 
 					Combiner *app_, ptr src_);
+			std::string state() const;
 			void gc(Edict const &cmd) const;
 			Continuation *supply(ptr a);
 			Continuation *apply();

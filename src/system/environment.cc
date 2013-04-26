@@ -35,11 +35,11 @@ std::function<void (ptr, ptr)> env_binder(std::map<std::string, ptr> &B)
 }
 
 Environment::Environment(ptr env_lst):
-	parent_list(env_lst)
+	parent_list(env_lst), bindings()
 {}
 
 Environment::Environment(ptr args, ptr pars, ptr env_lst):
-	parent_list(env_lst)
+	parent_list(env_lst), bindings()
 {
 	match_tree(args, pars, env_binder(bindings));
 }

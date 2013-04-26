@@ -6,9 +6,17 @@
 
 using namespace Scarlett;
 
-class TestEnv: public std::map<std::string, ptr>
+class TestEnv: public Static<Object>, public std::map<std::string, ptr>
 {
 	public:
+		void gc(Edict const &cmd) const
+		{
+			for (auto &kv : *this)
+			{
+				cmd(kv.second);
+			}
+		}
+
 		void operator()(ptr a, ptr b)
 		{
 			std::cerr << "matching: " << a->repr()

@@ -149,12 +149,12 @@ namespace GCTest {
 		unsigned n = std::count_if(Mock::is.begin(), Mock::is.end(),
 			[] (std::pair<size_t, bool> const &p) { return p.second; });
 		if (n != 3) throw(Exception(ERROR_fail, "initial state incorrect."));
-		GC<Object>::cycle();
+		GC<Object>::cycle(true);
 		n = std::count_if(Mock::is.begin(), Mock::is.end(),
 			[] (std::pair<size_t, bool> const &p) { return p.second; });
 		if (n != 3) throw(Exception(ERROR_fail, "objects should not have been deleted."));
 		v.clear();
-		GC<Object>::cycle();
+		GC<Object>::cycle(true);
 		n = std::count_if(Mock::is.begin(), Mock::is.end(),
 			[] (std::pair<size_t, bool> const &p) { return p.second; });
 		if (n != 0) throw(Exception(ERROR_fail, "objects should have been deleted now."));

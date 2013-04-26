@@ -26,6 +26,11 @@ Test::Unit Map_test(
 });
 #endif
 
+std::string Multi_map::state() const
+{
+	return Misc::format("[ Map | ", ::repr(src), " -> ", ::repr(tgt), " ]");
+}
+
 Multi_map::Multi_map(Continuation *C, Environment *env_, Combiner *app_, ptr src_):
 	Continuation(C), env(env_), app(app_), src(src_), tgt(&nil), 
 	improper(false), l(0)

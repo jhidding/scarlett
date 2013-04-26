@@ -8,7 +8,7 @@ namespace Scarlett
 {
 	class Program: public Static<Object>
 	{
-		Continuation *_begin, *_end;
+		Continuation *_begin, *_end, *_cc;
 
 		public:
 			class iterator: public Static<Object>, 
@@ -27,21 +27,27 @@ namespace Scarlett
 			};
 
 			Program(Continuation *begin_, Continuation *end_):
-				_begin(begin_), _end(end_) {}
+				_begin(begin_), _end(end_), _cc(NULL) {}
 
-			virtual void gc(Edict const &cmd) const { cmd(_begin); cmd(_end); }
+			virtual void gc(Edict const &cmd) const 
+			{ 
+				if (_cc != NULL) cmd(_cc);
+				cmd(_begin); cmd(_end); 
+			}
+
 			iterator begin() const { return iterator(_begin); }
 			iterator end() const { return iterator(_end); }
 
 			void run(bool echo = false)
 			{
-				Continuation *c = _begin;
-				while (c != _end) 
+				_cc = _begin;
+				while (_cc != _end) 
 				{
 					if (echo)
-						std::cerr << c->state() << std::endl;
+						std::cerr << _cc->state() << std::endl;
 
-					c = c->apply();
+					GC<Object>::cycle();
+					_cc = _cc->apply();
 				}
 			} 
 	};
