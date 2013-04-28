@@ -3,20 +3,21 @@
 
 namespace Scarlett
 {
-	inline ptr convert_to_ptr(ptr a)
-
-	{ return a; }
-
-	inline ptr convert_from_ptr(ptr a)
-	{ return a; }
-
 	template <typename T>
-	inline ptr convert_to_ptr(T const &value)
-	{ return new Atom<T>(value); }
+	class Convert
+	{
+		public:
+			static inline T const &from_ptr(ptr a) { return cast_ptr<Atom<T>>(a)->value(); }
+			static inline ptr to_ptr(T const &value) { return new Atom<T>(value); }
+	};
 
-	template <typename T>
-	inline T convert_from_ptr(ptr a)
-	{ return cast_ptr<Atom<T>>(a)->value(); }
+	template <>
+	class Convert<ptr>
+	{
+		public:
+			static inline ptr from_ptr(ptr a) { return a; }
+			static inline ptr to_ptr(ptr a) { return a; }
+	};
 
 	template <typename Ret, typename Arg, typename ...Rest>
 	class bind_1st
@@ -50,7 +51,7 @@ namespace Scarlett
 
 			inline Continuation *operator()(Continuation *C, Environment *env, ptr args)
 			{
-				return C->supply(convert_to_ptr<Ret>(foo()));
+				return C->supply(Convert<Ret>::to_ptr(foo()));
 			}
 
 			inline Ret call(ptr args)
@@ -74,14 +75,14 @@ namespace Scarlett
 				if (sizeof...(Rest) != (proper_list_length(args) - 1))
 					throw Exception(ERROR, "wrong number of arguments");
 
-				return C->supply(convert_to_ptr<Ret>(call(args)));
+				return C->supply(Convert<Ret>::to_ptr(call(args)));
 			}
 
 			inline Ret call(ptr args)
 			{
 				return Curry<Ret, Rest...>(
 					bind_1st<Ret, Arg, Rest...>(
-						foo, convert_from_ptr<Arg>(
+						foo, Convert<Arg>::from_ptr(
 							car(args)))).call(cdr(args));
 			}
 	};

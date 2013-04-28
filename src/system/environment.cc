@@ -66,7 +66,8 @@ ptr Environment::look_up(std::string const &name)
 			{}
 		}
 
-		throw Exception(ERROR_unbound, name);
+		print_map(std::cerr);
+		throw Exception(ERROR_unbound, "unbound symbol: ", name);
 	}
 	else
 	{

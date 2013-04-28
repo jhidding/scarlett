@@ -1,0 +1,3 @@
+
+(display (operative? $vau) "\n")
+

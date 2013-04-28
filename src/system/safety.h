@@ -2,6 +2,7 @@
 #include "../object.h"
 #include "../pair.h"
 #include "../exception.h"
+#include "environment.h"
 #include "../misc/format.h"
 #include "../read/read.h"
 #include <utility>
@@ -141,6 +142,13 @@ namespace Scarlett
 			bool operator()(ptr a) const { return is_proper_list(a); }
 	};
 
+	class Is_environment: public Assertion
+	{
+		public:
+			std::string description() const { return "environment?"; }
+			bool operator()(ptr a) const { return is_environment(a); }
+	};
+
 	inline void assert_that(std::string const &, ptr) {}
 
 	template <typename ...Rest>
@@ -149,7 +157,7 @@ namespace Scarlett
 			Assertion const &pred, Rest &&...rest)
 	{
 		if (not pred(a))
-			throw Exception(ERROR, "failed test [", pred.description(), "] in ", place);
+			throw Exception(ERROR, "failed test [", pred.description(), "] for [", repr(a), "] in ", place);
 
 		assert_that(place, a, std::forward<Rest>(rest)...);
 	}

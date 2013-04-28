@@ -31,10 +31,15 @@ inline Continuation *eval_args_and_apply(Continuation *cc, Environment *env,
 	return apply(nc, env, &Eval, list(args));
 }
 
-Continuation *internal_eval(Continuation *cc, Environment *env, ptr expr)
+Continuation *internal_eval(Continuation *cc, Environment *env, ptr args_)
 {
-//	std::cerr << "eval: " << deep_list_repr(expr) << std::endl;
-	expr = car(expr);
+//	std::cerr << "eval: " << deep_list_repr(args_) << std::endl;
+	ptr expr = car(args_);
+	if (is_pair(cdr(args_)))
+	{
+		assert_that("$eval", cadr(args_), Is_environment());
+		env = cast_ptr<Environment>(cadr(args_));
+	}
 
 	if (is_symbol(expr)) 
 		return cc->supply(env->look_up(expr));
@@ -71,4 +76,5 @@ Continuation *internal_eval(Continuation *cc, Environment *env, ptr expr)
 }
 
 Global<C_operative> Scarlett::Eval("$eval", internal_eval);
+Global<C_applicative> Eval_app("eval", internal_eval);
 

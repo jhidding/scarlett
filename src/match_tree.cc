@@ -20,7 +20,7 @@ void Scarlett::match_tree(ptr a_, ptr b_, std::function<void (ptr, ptr)> const &
 		if (is_nil(a))
 		{
 			if (not is_nil(b)) throw Exception(ERROR_match, "a is nil, but b isn't",
-					a->repr(), " ", b->repr());
+					repr(a_), " <-> ", repr(b_));
 			continue;
 		}
 
@@ -32,7 +32,7 @@ void Scarlett::match_tree(ptr a_, ptr b_, std::function<void (ptr, ptr)> const &
 		if (is_pair(a))
 		{
 			if (not is_pair(b)) throw Exception(ERROR_match, "a is pair, but b isn't",
-					a->repr(), " ", b->repr());
+					repr(a_), " <-> ", repr(b_));
 
 			sa.push(cdr(a)); sa.push(car(a));
 			sb.push(cdr(b)); sb.push(car(b));
