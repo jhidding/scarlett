@@ -4,6 +4,7 @@
 
 using namespace Scarlett;
 
+Global<C_applicative> Is_pair("pair?", Curry<bool, ptr>(is_pair));
 Global<C_applicative> Cons("cons", Curry<ptr, ptr, ptr>(cons));
 Global<C_applicative> Car("car", Curry<ptr, ptr>(car));
 Global<C_applicative> Cdr("cdr", Curry<ptr, ptr>(cdr));

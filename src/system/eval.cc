@@ -69,7 +69,7 @@ Continuation *internal_eval(Continuation *cc, Environment *env, ptr args_)
 			return apply(nc, env, &Eval, list(comb));
 		}
 
-		throw Exception(ERROR, "this ain't an applicable thing 'ere: ", comb->repr());
+		throw Exception(ERROR, "this ain't an applicable thing 'ere: ", comb->repr(), ". evaluating: ", repr(args_));
 	}
 
 	return cc->supply(expr);
