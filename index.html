@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+	
+<html>
+	<head>
+		<title>Scarlett -- a Kernel/Scheme interpreter</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<meta name="author" content="Johan Hidding">
+		<link type="text/css" rel="stylesheet" href="style.css">
+	</head>
+
+	<body> <div id="centred-content">
+		<div id="header"> <img src="logo.svg" alt="$carlett"> </div>
+		<div id="navigation"> 
+			<a href="#about">(About)</a>
+			<a href="#language">(the Language)</a>
+			<a href="#source">(the Source)</a>
+		</div>
+		<div class="block">
+			<a id="about"><h2>About</h2></a>
+			<p> Scarlett is an interpreter for a language that is inspired on Kernel/Scheme.
+			I aim to stay close to John Shutt's Kernel as presented in the 
+			<a href="http://web.cs.wpi.edu/~jshutt/kernel.html">R<sup>-1</sup>RK</a>
+			combined with the newest Scheme standard
+			<a href="http://www.r6rs.org">R<sup>6</sup>RS</a>.
+			However, I don't consider these documents to be holy, even though the design
+			principles followed in the R<sup>-1</sup>RK are very good.
+			The interpreter is developed in portable C++ (2011 standard). The aim is to provide
+			an easy extension language to C++, with transparent support for numerical arrays
+			in the tradition of Python with NumPy.</p>
+
+			<p> Performance in terms of speed is not a primary target. The idea is to have
+			all underlying structures and operators defined in C++; Scarlett providing
+			the means of putting different elements together.
+			</p> </div>
+
+		<div class="block">
+			<a id="language"><h2>the Language</h2></a>
+			<p> Scarlett fits into a long history of Lisp variants like Scheme and Kernel. If you
+			are not familiar with either Lisp or Scheme, I recommend to learn Scheme from the lectures
+			by 
+			<ul>
+				<li> Abelson and Sussman -- "Structure and Interpretation of Programming Languages",
+			</ul>
+			as well as 
+			<ul>
+				<li> "the Little Schemer" and "the Seasoned Schemer".
+			</ul>
+			There are several (planned) features that deviate from the Schemes that you may know.</p>
+
+			<h3>F-exprs</h3>
+			<p>Like Kernel, we make the distinction between <i>operative</i> and <i>applicative</i>
+			functions. Applicatives have their argument-tree mapped through <tt>eval</tt>, before
+			being passed to the underlying operative, which applies its arguments unevaluated.
+			Operatives should have name starting with <tt>$</tt> and are created using
+			<tt>$vau</tt>. To create an applicative from an operative and back, the applicatives
+			<tt>wrap</tt> and <tt>unwrap</tt> are defined. For example, the <tt>$lambda</tt>-operative
+			can be defined as
+			<pre>($define! $lambda ($vau (par-tree . body) dyn-env
+    (wrap (eval (list* $vau par-tree #ignore body) dyn-env))))</pre> </p>
+
+			<h3>Pattern matching</h3>
+			<p>Scarlett supports Kernel-style formal parameter trees. This means a set of parameters
+			can have more complicated topology than just a proper or improper list.
+			For example, we can decompose a list into its <tt>car</tt> and <tt>cdr</tt>,
+			by pattern matching:
+			<pre>($define! (lcar . lcdr) [1 2 3 4])</pre>
+			Resulting in <tt>lcar</tt> having value <tt>1</tt>, and
+			<tt>lcdr</tt> having value <tt>(2 3 4)</tt>.
+			We added some syntax candy of <tt>[items ...]</tt>, which is equivalent
+			to <tt>(list items ...)</tt>, and transparent support for pair syntax,
+			<tt>(func . lst)</tt> being the same as <tt>(apply func lst)</tt>.
+			This means we don't need the functions <tt>cons, car, cdr, list</tt>
+			or <tt>list*</tt>; eventhough they are still defined as such.</p>
+
+			<h3>Cyclic lists</h3>
+			<p>Scarlett has build-in support for cyclic lists. A bit of extra syntax:</p>
+			<pre>[1 2 3 4 ...]</pre>
+			is equivalent to
+			<pre>($let ((a (list 1 2 3 4))) (encycle! a 3 1) a)</pre>
+			This is extremely usefull when we try to match list patterns for some function.
+			For example an implementation of <tt>$let</tt>, may check its arguments 
+			for congruence against
+			<pre>(((:par-tree: :expr:) ...) :body:)</pre>
+
+			<h3>Objects</h3>
+			<p>Objects are very naturally implemented in Scarlett in the form of <i>closures</i>.
+<pre>($define! look-up
+  (wrap ($vau (s) e (eval s e))))
+
+($define! make-object 
+  ($lambda ()
+    ($let ((env (current-environment)))
+      ($vau (method . args) #ignore
+        ($cond 
+	  ((combiner? (look-up method))
+	   (eval [method . args] env))
+
+	  (#t (look-up method)))))))
+
+($let ((A (make-object)))
+  (A $define! x 7)
+  (A $define! f ($lambda (y) (* x y)))
+  (A f (+ 4 2)))</pre>
+			Returning the value <tt>42</tt>. This example can be expanded to support class definitions 
+			and inheritance. An interface to C++ objects can be implemented
+			to mimic this style objects. Also this allows to implement multi-type operators like
+			<tt>+</tt>, <tt>-</tt>, <tt>*</tt>, etc. transparently.
+			</p> </div>
+
+		<div class="block">
+			<a id="source"><h2>the Source</h2></a>
+			<p> The source code of Scarlett is available on
+			<a href="http://github.com/jhidding/scarlett">github</a>,
+			under the GPL3 licence. To download Scarlett say
+			<pre>git clone https://github.com/jhidding/scarlett.git</pre>
+			Compile the code using <tt>./make all</tt> in the directory
+			that contains the <tt>make</tt>-script. I use C++11 extensively,
+			so a version of GCC &ge; 4.7 is required.
+			</p> </div>
+
+		<address> 
+		by Johan Hidding, Copyright 2013, Contact me at:
+		<!--EScrambled Email Address Code--> 
+		 
+		<!--For help with this code go to--> 
+		<!--http://innerpeace.org/escrambler.shtml--> 
+		 
+		<script type="text/javascript">	
+		<!--
+		function escramble()
+		{
+			var a,b,c,d,e,f,g,h,i
+			a='<a href=\"mai'
+			b='johann'
+			c='\">'
+			b+='es.hiddi'
+			a+='lto:'
+			b+='ng'
+			b+='@'
+			e='<\/a>'
+			f=''
+			b+='gma'
+			g='<img src=\"'
+			h=''
+			b+='il.com'
+			i='\" alt="send me mail." border="0">'
+		 
+			if (f) d=f
+			else 
+				if (h) d=g+h+i
+				else d=b
+			
+			document.write(a+b+c+d+e)
+		}
+		//-->
+		escramble()
+		</script>
+		</address> 
+	</div> </body>
+</html>
+
