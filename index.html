@@ -14,6 +14,7 @@
 		<div id="navigation"> 
 			<a href="#about">(About)</a>
 			<a href="#language">(the Language)</a>
+			<a href="#state">(current State)</a>
 			<a href="#source">(the Source)</a>
 		</div>
 		<div class="block">
@@ -107,8 +108,28 @@
 			Returning the value <tt>42</tt>. This example can be expanded to support class definitions 
 			and inheritance. An interface to C++ objects can be implemented
 			to mimic this style objects. Also this allows to implement multi-type operators like
-			<tt>+</tt>, <tt>-</tt>, <tt>*</tt>, etc. transparently.
+			<tt>+</tt>, <tt>-</tt>, <tt>*</tt>, etc. transparently. </p>
+
+			<h3>Universal lists (NYI)</h3>
+			<p>Scheme has several linear structures: lists, vectors and streams. Each has its set of
+			accessor functions. Combining different structures in a single applicative like <tt>map</tt>
+			is not so easy. If we use the Scarlett object interface with C++ iterators in mind,
+			it becomes feasible to define a universal lazy <tt>map</tt>. Also all these structures
+			allow for a <tt>head</tt>/<tt>tail</tt> functionality, so a vector can be matched
+			to a paramater-tree as easily as a stream, or user defined sequence. This feature is
+			<b>N</b>ot <b>Y</b>et <b>I</b>mplemented.
 			</p> </div>
+
+		<div class="block">
+			<a id="state"><h2>current State</h2></a>
+			<p> Scarlett is not yet in top shape. In particular the following work needs to be done
+			<ul>
+				<li> linking C++ and Scarlett object interfaces
+				<li> implementing numerical tower
+				<li> universal lists
+				<li> continuation guards
+				<li> ...
+			</ul> </p> </div>
 
 		<div class="block">
 			<a id="source"><h2>the Source</h2></a>
