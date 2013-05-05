@@ -74,7 +74,24 @@
 			to <tt>(list items ...)</tt>, and transparent support for pair syntax,
 			<tt>(func . lst)</tt> being the same as <tt>(apply func lst)</tt>.
 			This means we don't need the functions <tt>cons, car, cdr, list</tt>
-			or <tt>list*</tt>; eventhough they are still defined as such.</p>
+			or <tt>list*</tt>; eventhough they are still defined as such. A function returning
+			the first 12 numbers from the Fibonacci sequence from <tt>(fib [1 1] 10)</tt>,
+			can be defined as follows</p>
+			<pre>($define! fib
+  ($lambda ((a b . c) n)
+    ($if (zero? n)
+      [a b . c]
+      (fib [(+ a b) a b . c] (- n 1)))))</pre>
+
+			<p>[<b>N(Y|E)I</b>] There are some ideas that go even further. Using function overloading
+			in combination with pattern matching with predicates, allows you to
+			write programs in a formal way, without using <tt>$if</tt>-statements.
+			This is similar, though more powerfull, to the <tt>$case-lambda</tt> construct in scheme.
+			There are several complications, mainly in syntax. Do we allow the parameter-tree to be
+			mixed with predicates? They would have to be predicates <i>before</i> evaluation. 
+			How do we mix in type-checking into this? All in all, it seems that a simple conditional
+			is just as simple, and clear as a more complicated pattern-matching. Also an <tt>$if</tt>
+			statement is more efficient than matching an entire pattern.</p>
 
 			<h3>Cyclic lists</h3>
 			<p>Scarlett has build-in support for cyclic lists. A bit of extra syntax:</p>
