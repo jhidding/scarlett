@@ -13,6 +13,7 @@
 		<div id="header"> <img src="logo.svg" alt="$carlett"> </div>
 		<div id="navigation"> 
 			<a href="#about">(About)</a>
+			<a href="#news">(News)</a>
 			<a href="#language">(the Language)</a>
 			<a href="#state">(current State)</a>
 			<a href="#source">(the Source)</a>
@@ -33,10 +34,15 @@
 			<p> Performance in terms of speed is not a primary target. The idea is to have
 			all underlying structures and operators defined in C++; Scarlett providing
 			the means of putting different elements together.
-			</p> </div>
+			</p> 
+			
+			<a href="http://xkcd.com/297/">
+			<img src="http://imgs.xkcd.com/comics/lisp_cycles.png" alt="xkcd - lisp cycles">
+			</a></div>
 
-		<div class="block">
+		<div class="block" id="news">
 			<a id="news"><h2>News</h2></a>
+			<div class="illustration"></div>
 			<dl>
 				<dt>2013/05/06</dt> <dd>Implemented interface between
 				C++ classes and Scarlett operative closures.</dd>
@@ -44,7 +50,18 @@
 			</dl></div>
 
 		<div class="block">
+			<a id="state"><h2>current State</h2></a>
+			<p> Scarlett is not yet in top shape. In particular the following work needs to be done
+			<ul>
+				<li> implementing numerical tower
+				<li> universal lists
+				<li> continuation guards
+				<li> ...
+			</ul> </p> </div>
+
+		<div class="block" id="language">
 			<a id="language"><h2>the Language</h2></a>
+			<div class="illustration"></div>
 			<p> Scarlett fits into a long history of Lisp variants like Scheme and Kernel. If you
 			are not familiar with either Lisp or Scheme, I recommend to learn Scheme from the lectures
 			by 
@@ -144,17 +161,6 @@
 			to a paramater-tree as easily as a stream, or user defined sequence. This feature is
 			<b>N</b>ot <b>Y</b>et <b>I</b>mplemented.
 			</p> </div>
-
-		<div class="block">
-			<a id="state"><h2>current State</h2></a>
-			<p> Scarlett is not yet in top shape. In particular the following work needs to be done
-			<ul>
-				<li> linking C++ and Scarlett object interfaces
-				<li> implementing numerical tower
-				<li> universal lists
-				<li> continuation guards
-				<li> ...
-			</ul> </p> </div>
 
 		<div class="block">
 			<a id="source"><h2>the Source</h2></a>

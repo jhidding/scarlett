@@ -46,7 +46,10 @@ a:visited
 	text-align:	right;
 }
 
-#content img {
+.block img {
+	background: white;
+	padding: 1em;
+	border: solid thin black;
 }
 
 .block {
@@ -99,46 +102,26 @@ h2
 	opacity:	1.0;
 	float: right; 
 	position: relative; 
-	top: -7em; right: -6em;
+	top: -5em; right: -6em;
 	margin-bottom: -5em;
 	margin-left: -5em;
-	-moz-border-radius: 3em; 
-	-webkit-border-radius:	3em;
-	-o-border-radius: 3em; 
-	border-radius: 3em; 
+	-moz-border-radius: 0.5em; 
+	-webkit-border-radius:	0.5em;
+	-o-border-radius: 0.5em; 
+	border-radius: 0.5em; 
 	border: solid 3px black;
 	width: 200px;
 	height: 200px;
 }
 
-#music .illustration
+#language .illustration
 {
-	background: url('images/muziek.jpeg');
+	background: url('language.jpg');
 }
 
-#links .illustration
+#news .illustration
 {
-	background: url('images/links.jpeg');
-}
-
-#astronomy .illustration
-{
-	background: url('images/adhesion.jpeg');
-}
-
-#programming .illustration
-{
-	background: url('images/multivac.jpg');
-}
-
-#about .illustration
-{
-	background: url('images/funky_me.jpeg');
-}
-
-#inleiding .illustration
-{
-	background: url('images/petit.jpg');
+	background: url('news.jpg');
 }
 
 #navigation
