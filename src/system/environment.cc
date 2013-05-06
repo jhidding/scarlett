@@ -64,6 +64,14 @@ void Environment::define(ptr args, ptr pars)
 	match_tree(args, pars, env_binder(bindings));
 }
 
+void Environment::define(std::string const &name, ptr value)
+{
+	if (bindins.count(name) > 0)
+		throw Exception(ERROR_bound, name);
+
+	bindings[name] = value;
+}
+
 ptr Environment::look_up(std::string const &name)
 {
 	if (bindings.count(name) == 0)

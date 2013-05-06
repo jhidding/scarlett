@@ -43,11 +43,15 @@ namespace Scarlett
 			std::string type_name() const { return "environment"; }
 
 			Environment(ptr env_lst);
+			Environment(std::map<std::string, ptr> const &bindings_, ptr env_lst):
+				parent_list(env_lst), bindings(bindings_) {}
+
 			Environment(ptr args, ptr pars, ptr env_lst);
 
 			/*! \brief define a new variable in this environment
 			 */
 			void define(ptr args, ptr pars);
+			void define(std::string const &name, ptr value);
 
 			/*! \brief method looking up a symbol in the environment.
 			 *
