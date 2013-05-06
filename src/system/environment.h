@@ -70,6 +70,16 @@ namespace Scarlett
 			 * debugging purposes only.
 			 */
 			void print_map(std::ostream &out);
+
+			/* uncomment destructor for debugging
+			virtual ~Environment()
+			{
+				std::cerr << "~env: ";
+				for (auto &kv : bindings)
+					std::cerr << kv.first << " ";
+				std::cerr << std::endl;
+			}
+			// */
 	};
 
 	inline bool is_environment(ptr a) 

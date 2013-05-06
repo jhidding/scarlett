@@ -158,20 +158,8 @@ namespace Scarlett
 	inline bool is_ignore(ptr q) { return q == &ignore; }
 	inline bool is_inert(ptr q) { return q == &inert; }
 
-
-	class Atom_base_base: public Object
-	{
-		public:
-			virtual ptr deref() = 0;
-	};
-
-	inline ptr atom_ref(ptr p)
-	{
-		return cast_ptr<Atom_base_base>(p)->deref();
-	}
-
 	template <typename T>
-	class Atom_base: public Atom_base_base
+	class Atom_base: public Object
 	{
 		T m_value;
 
@@ -191,12 +179,10 @@ namespace Scarlett
 			T &ref() { return m_value; }
 			operator T() const { return m_value; }
 
-			bool is_equiv(ptr other) const
+		/*	bool is_equiv(ptr other) const
 			{
 				return cast_ptr<Atom_base<T>>(other)->m_value == m_value;
-			}
-
-			ptr deref();
+			} */
 	};
 
 	template <typename T>
@@ -205,12 +191,6 @@ namespace Scarlett
 		public:
 			Atom(T _value): Atom_base<T>(_value) {}
 	};
-
-	template <typename T>
-	ptr Atom_base<T>::deref()
-	{
-		return new Atom<T *>(&ref());
-	}
 
 	template <>
 	class Atom<bool>: public Atom_base<bool>

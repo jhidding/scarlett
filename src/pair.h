@@ -77,11 +77,18 @@ namespace Scarlett
 	inline char mark(ptr q) { return cast_ptr<Pair>(q)->mark(); }
 	inline ptr set_car(ptr q, ptr a) { cast_ptr<Pair>(q)->set_car(a); return &inert; }
 	inline ptr set_cdr(ptr q, ptr a) { cast_ptr<Pair>(q)->set_cdr(a); return &inert; }
+
 	inline ptr list() { return &nil; }
 
 	template <typename ...Args>
 	inline ptr list(ptr a, Args &&...args)
 	{ return cons(a, list(std::forward<Args>(args)...)); }
+
+	inline ptr list_star(ptr a, ptr b) { return cons(a, b); }
+
+	template <typename ...Args>
+	inline ptr list_star(ptr a, Args &&...args)
+	{ return cons(a, list_star(std::forward<Args>(args)...)); }
 
 	ptr copy_es_immutable(ptr a);
 	ptr for_each_pair(ptr a_, std::function<void (ptr)> const &f);

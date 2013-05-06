@@ -66,7 +66,7 @@ void Environment::define(ptr args, ptr pars)
 
 void Environment::define(std::string const &name, ptr value)
 {
-	if (bindins.count(name) > 0)
+	if (bindings.count(name) > 0)
 		throw Exception(ERROR_bound, name);
 
 	bindings[name] = value;
