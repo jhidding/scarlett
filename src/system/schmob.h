@@ -20,12 +20,6 @@
 
 namespace Scarlett
 {
-	template <typename T, typename ...Args>
-	T create(Args &&...args)
-	{
-		return T(std::forward<Args>(args)...);
-	}
-
 	template <typename T>
 	class C_object: public Operative
 	{
