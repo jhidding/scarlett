@@ -1,7 +1,7 @@
 body
 {
 	margin:		0 auto 0 auto;
-	max-width:	55em;
+	max-width:	50em;
 	background:	#800;
 	padding:	0;
 }
@@ -62,8 +62,14 @@ a:visited
 	padding:	1em;
 	border-top:	solid medium black;
 	background:	#ddd;
-	font: 		normal 12pt/20pt serif;
-	font-family:	"Linux Biolinum O", serif;
+	font: 		normal 14pt/22pt serif;
+	font-family:	"Gentium", serif;
+}
+
+sup {
+	position:	relative;
+	font-size:	10pt;
+	margin-top:	-10pt;
 }
 
 tt {	
