@@ -14,12 +14,31 @@
     along with Scarlett.  If not, see <http://www.gnu.org/licenses/>. */
 
 #pragma once
+#include <utility>
 #include "system.h"
 #include "global.h"
 #include "safety.h"
 
 namespace Scarlett
 {
+	/*! wrapping a C++ object.
+	 *
+	 * \c C_object behaves as a Scarlett operative defined as follows
+	 * \code{.scm}
+	 * ($define! make-object 
+	 *   ($lambda ()
+	 *     ($let ((env (current-environment)))
+	 *       ($vau (method . args) dyn_env
+	 *         ($cond 
+	 * 	  ((combiner? (look-up method))
+	 * 	   (eval [method . args] env))
+	 * 
+	 * 	  (#t (look-up method)))))))
+	 * \endcode
+	 * With the addition that the environment encapsulated thusly,
+	 * derives from the environment of a \link C_class , inheriting
+	 * its methods.
+	 */
 	template <typename T>
 	class C_object: public Operative
 	{
@@ -48,6 +67,18 @@ namespace Scarlett
 			}
 	};
 
+	/*! Wrapper for native C++ classes
+	 *
+	 * The class \c C_class is a wrapper around any class defined in C++.
+	 * It takes a single template argument, which should be the class
+	 * being wrapped. The constructor takes two arguments:
+	 * @param constructor a \link CEO pointing to the constructor of the class.
+	 * @param methods an \c initializer_list, each item being a pair containing
+	 * a string and a \link CEO.
+	 *
+	 * The resulting object is an \link Applicative that takes the same
+	 * arguments as the given constructor, returning a \link C_object.
+	 */
 	template <typename T>
 	class C_class: public Applicative
 	{
@@ -55,9 +86,11 @@ namespace Scarlett
 		CEO constructor;
 
 		public:
-			C_class(CEO const &constructor_, std::map<std::string, CEO> const &methods):
+			template <typename ...I>
+			C_class(CEO const &constructor_, std::initializer_list<std::pair<std::string, CEO>> const &methods):
 				constructor(constructor_)
 			{
+				//std::map<std::string, CEO> methods(std::forward<I>(m)...);
 				env = new Environment(&nil);
 				for (auto &kv : methods)
 				{

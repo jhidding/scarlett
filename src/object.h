@@ -39,7 +39,8 @@ namespace Scarlett
 		friend class GC<Object>;
 		static std::unique_ptr<GC<Object>> _gc_ptr;
 		static GC<Object> &_gc() {
-			if (not _gc_ptr) _gc_ptr = std::unique_ptr<GC<Object>>(new GC<Object>);
+			if (not _gc_ptr) 
+				_gc_ptr = std::unique_ptr<GC<Object>>(new GC<Object>);
 			return *_gc_ptr;
 		}
 

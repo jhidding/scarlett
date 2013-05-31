@@ -17,6 +17,28 @@
 
 using namespace Scarlett;
 
+C_module Numeric_module(
+	"(scarlett numeric)", {
+	{ "number", C_class<Number_interface>(
+		&no_constructor, {
+		{"+", Curry<ptr, Number_interface *, ptr>(&Number_interface::_add_)},
+		{"-", Curry<ptr, Number_interface *, ptr>(&Number_interface::_sub_)},
+		{"*", Curry<ptr, Number_interface *, ptr>(&Number_interface::_mul_)},
+		{"/", Curry<ptr, Number_interface *, ptr>(&Number_interface::_div_)},
+		{"%", Curry<ptr, Number_interface *, ptr>(&Number_interface::_mod_)},
+		{"<", Curry<bool, Number_interface *, ptr>(&Number_interface::_lt_)},
+		{">", Curry<bool, Number_interface *, ptr>(&Number_interface::_gt_)} })},
+
+	{ "exact-number", C_class<Exact_number_interface>(
+		&no_constructor, {
+		{"==", Curry<bool, Exact_number_interface *, ptr>(&Exact_number_interface::_eq_)},
+		{"!=", Curry<bool, Exact_number_interface *, ptr>(&Exact_number_interface::_ne_)},
+		{"<=", Curry<bool, Exact_number_interface *, ptr>(&Exact_number_interface::_le_)},
+		{">=", Curry<bool, Exact_number_interface *, ptr>(&Exact_number_interface::_ge_)} })},
+       
+	{ "gcd", C_applicative(Curry<int, int, int>(Scarlett::gcd)) },
+	{ "lcm", C_applicative(Curry<int, int, int>(Scarlett::lcm)) } });
+
 int Scarlett::gcd(int a, int b)
 {
 	while (a != 0 and b != 0)

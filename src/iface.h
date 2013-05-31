@@ -18,8 +18,7 @@
 
 namespace Scarlett
 {
-	/*! \class Convert<T>
-	 *  \brief converts generic values to Scarlett pointers and back.
+	/*! converts generic values to Scarlett pointers and back.
 	 *
 	 * When interfacing Scarlett with C++, we need to convert general
 	 * data to pointers. Data is encapsulated into \link Atom<T>.
@@ -44,8 +43,7 @@ namespace Scarlett
 			static inline ptr to_ptr(ptr a) { return a; }
 	};
 
-	/*! \class bind_1st
-	 *  \brief stores the first argument of a function
+	/*! stores the first argument of a function
 	 *
 	 * Stores the first argument to a function to create
 	 * a function object that has one less parameter.
@@ -69,8 +67,7 @@ namespace Scarlett
 			}
 	};
 
-	/*! \class Curry
-	 *  \brief Interfaces C++ functions to Scarlett by curry.
+	/*! Interfaces C++ functions to Scarlett by curry.
 	 *
 	 * Has at least one template argument
 	 * @param Ret return type
@@ -139,8 +136,7 @@ namespace Scarlett
 			}
 	};
 
-	/*! \fn create
-	 *  \brief Universal object factory
+	/*! Universal object factory
 	 *
 	 * Makes a function of an object constructor. The result
 	 * can be passed to Curry<Type, Args...>

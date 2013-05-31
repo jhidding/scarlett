@@ -60,10 +60,9 @@ Test::Unit Schmob_test(
 	Result r;
 
 	Static<C_class<TbS>> Oop_test(
-		Curry<TbS, int>(create<TbS, int>),
-		std::map<std::string, CEO>(
-			{{ "+", Curry<int, TbS *, int, int>(&TbS::plus)  },
-			 { "-", Curry<int, TbS *, int, int>(&TbS::minus) }}));
+		C_class<TbS>(Curry<TbS, int>(create<TbS, int>),
+		{ { "+", Curry<int, TbS *, int, int>(&TbS::plus)  },
+		  { "-", Curry<int, TbS *, int, int>(&TbS::minus) } }));
 
 	env.define("oop-test", &Oop_test);
 

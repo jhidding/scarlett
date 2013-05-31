@@ -53,6 +53,17 @@ namespace Scarlett
 			}
 	};
 
+	class C_module: public Static<Environment>
+	{
+		public:
+			template <typename T>
+			C_module &operator<<(std::pair<std::string, T> const &kv)
+			{
+				define(kv.first, new T(kv.second));
+				return *this;
+			}
+	};
+
 	inline void load_global_env(Environment &env)
 	{
 		for (auto &kv : Global<C_applicative>::dir())
