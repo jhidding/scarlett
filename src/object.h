@@ -180,10 +180,10 @@ namespace Scarlett
 			T &ref() { return m_value; }
 			operator T() const { return m_value; }
 
-		/*	bool is_equiv(ptr other) const
+			bool is_equiv(ptr other) const
 			{
 				return cast_ptr<Atom_base<T>>(other)->m_value == m_value;
-			} */
+			} 
 	};
 
 	template <typename T>

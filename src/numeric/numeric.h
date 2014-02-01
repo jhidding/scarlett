@@ -24,7 +24,7 @@ namespace Scarlett
 	extern bool is_zero(ptr a);
 
 	/*! Interface common to all numeric values
-	 */
+	 
 	class Number_interface
 	{
 		public:
@@ -92,6 +92,6 @@ namespace Scarlett
 	template <>
 	Atom<std::complex<double>>: public Numeric<std::complex<double>>
 	{
-	};
+	};*/
 }
 

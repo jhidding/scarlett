@@ -39,6 +39,9 @@ class TbS
 
 		int minus(int a, int b)
 		{ return c * (a - b); }
+
+		bool operator==(TbS const &o) const
+		{ return c == o.c; }
 };
 
 std::ostream &operator<<(std::ostream &out, TbS const &obj)

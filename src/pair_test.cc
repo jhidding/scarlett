@@ -35,6 +35,7 @@ Test::Unit Pair_test(
 		"(eq? b (cdr (cons a b)))");
 
 	auto lst = list(1_a, 2_a, 3_a, 4_a, 5_a);
+	std::cout << car(lst)->repr() << std::endl;
 	Test::assert(car(lst)->is_equiv(1_a),
 		"(eq? (car lst) 1)");
 	Test::assert(cadr(lst)->is_equiv(2_a),
